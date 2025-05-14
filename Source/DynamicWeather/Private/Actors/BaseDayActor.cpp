@@ -3,6 +3,7 @@
 
 #include "Actors/BaseDayActor.h"
 
+#include "DynamicWeatherSubsystem.h"
 #include "Components/DirectionalLightComponent.h"
 #include "Components/ExponentialHeightFogComponent.h"
 #include "Components/SkyAtmosphereComponent.h"
@@ -51,7 +52,30 @@ ABaseDayActor::ABaseDayActor(const FObjectInitializer& Init) : Super(Init)
 void ABaseDayActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (const UWorld* World = GetWorld())
+	{
+		if (UDynamicWeatherSubsystem* DynamicWeatherSubsystem = World->GetSubsystem<UDynamicWeatherSubsystem>())
+		{
+			DynamicWeatherSubsystem->SetDaySequenceActor(this);
+		}
+	}
+}
+
+void ABaseDayActor::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	if (const UWorld* World = GetWorld())
+	{
+		if (UDynamicWeatherSubsystem* DynamicWeatherSubsystem = World->GetSubsystem<UDynamicWeatherSubsystem>())
+		{
+			if (DynamicWeatherSubsystem->GetDaySequenceActor(/* bFindFallbackOnNull */ false) != this)
+			{
+				DynamicWeatherSubsystem->SetDaySequenceActor(this);
+			}
+		}
+	}
 }
 
 
