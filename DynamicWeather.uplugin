@@ -19,6 +19,11 @@
 			"Name": "DynamicWeather",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "DynamicWeather",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	]
 }
