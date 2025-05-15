@@ -21,7 +21,7 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "DynamicWeather",
+			"Name": "DynamicWeatherEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}

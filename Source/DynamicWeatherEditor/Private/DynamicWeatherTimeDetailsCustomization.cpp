@@ -17,7 +17,7 @@
 #include "Logging/LogMacros.h"
 #include "Misc/Attribute.h"
 #include "Misc/CString.h"
-#include "DaySequenceTime.h"
+#include "DynamicWeatherTime.h"
 #include "PropertyHandle.h"
 #include "Trace/Detail/Channel.h"
 #include "UObject/UnrealType.h"
@@ -59,7 +59,7 @@ FText FDynamicWeatherTimeDetailsCustomization::OnGetTimeText() const
 
 	if (RawData.Num())
 	{
-		FString CurrentValue = ((FDaySequenceTime*)RawData[0])->ToString();
+		FString CurrentValue = ((FDynamicWeatherTime*)RawData[0])->ToString();
 		return FText::FromString(CurrentValue);
 	}
 
@@ -83,9 +83,9 @@ void FDynamicWeatherTimeDetailsCustomization::OnTimeTextCommitted(const FText& I
 			
 			TimeProperty->NotifyPreChange();
 			
-			((FDaySequenceTime*)RawData[0])->Hours   = FCString::Atoi(*Splits[0]);
-			((FDaySequenceTime*)RawData[0])->Minutes = NumSplits > 1 ? FCString::Atoi(*Splits[1]) : 0;
-			((FDaySequenceTime*)RawData[0])->Seconds = NumSplits > 2 ? FCString::Atoi(*Splits[2]) : 0;
+			((FDynamicWeatherTime*)RawData[0])->Hours   = FCString::Atoi(*Splits[0]);
+			((FDynamicWeatherTime*)RawData[0])->Minutes = NumSplits > 1 ? FCString::Atoi(*Splits[1]) : 0;
+			((FDynamicWeatherTime*)RawData[0])->Seconds = NumSplits > 2 ? FCString::Atoi(*Splits[2]) : 0;
 			
 			TimeProperty->NotifyPostChange(EPropertyChangeType::ValueSet);
 			TimeProperty->NotifyFinishedChangingProperties();

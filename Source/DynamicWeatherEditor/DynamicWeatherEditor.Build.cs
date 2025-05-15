@@ -34,10 +34,14 @@ public class DynamicWeatherEditor : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
+				"EditorStyle",
+				"UnrealEd",
+				"EditorWidgets",
 				"CoreUObject",
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"DynamicWeather",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
@@ -47,6 +51,7 @@ public class DynamicWeatherEditor : ModuleRules
 			new string[]
 			{
 				// ... add any modules that your module loads dynamically here ...
+				"PropertyEditor"
 			}
 			);
 	}
