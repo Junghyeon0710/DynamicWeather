@@ -25,7 +25,8 @@ public class DynamicWeather : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+				"Core", 
+				"StructUtils"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

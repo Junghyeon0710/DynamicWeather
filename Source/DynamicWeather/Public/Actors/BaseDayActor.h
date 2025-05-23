@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "BaseDayActor.generated.h"
 
+class UDayTimerCollectionAsset;
 class USkyAtmosphereComponent;
 class USkyLightComponent;
 class UVolumetricCloudComponent;
@@ -24,10 +25,38 @@ public:
 
 	ABaseDayActor(const FObjectInitializer& Init);
 
+public:
+	/**
+     * Get the duration of each day cycle in hours (assuming PlayRate is 1.0)
+     *
+     * @return float, time in Seconds
+     */
+	UFUNCTION(BlueprintCallable, Category="TimeOfDay")
+	float GetTimePerCycleToSeconds() const;
+
+	/**
+	 * Get the duration of each DayLength in hours (assuming PlayRate is 1.0)
+	 *
+	 * @return float, DayLength in Seconds
+	 */
+	UFUNCTION(BlueprintCallable, Category="TimeOfDay")
+	float GetDayLengthToSeconds() const;
+
+	/**
+ * Get the duration of each InitialTimeOfDay in hours (assuming PlayRate is 1.0)
+ *
+ * @return float, InitialTimeOfDay in Seconds
+ */
+	UFUNCTION(BlueprintCallable, Category="TimeOfDay")
+	float GetInitialTimeOfDayToSeconds() const;
+
 protected:
 
 	virtual void BeginPlay() override;
 	virtual void OnConstruction(const FTransform& Transform) override;
+
+protected:
+	virtual void InitializeDayTimers();
 
 protected:
 
@@ -58,6 +87,13 @@ protected:
 
 protected:
 
+#if WITH_EDITORONLY_DATA
+
+	/** 편집기에서 미리 보기할 시간을 설정합니다. 런타임 시 시작 시간에는 영향을 미치지 않습니다.*/
+	UPROPERTY(EditAnywhere, Category = Preview, NonTransactional)
+	FDynamicWeatherTime TimeOfDayPreview;
+#endif
+
 	/** 하루 주기의 전체 길이 (지속 시간) */
 	UPROPERTY(EditAnywhere, Category = RuntimeDayCycle)
 	FDynamicWeatherTime DayLength;
@@ -70,4 +106,9 @@ protected:
 	/** 하루 주기가 시작되는 초기 시간 */
 	UPROPERTY(EditAnywhere, Category = RuntimeDayCycle)
 	FDynamicWeatherTime InitialTimeOfDay;
+
+public:
+
+	UPROPERTY(EditAnywhere, Category="Sequence")
+	TArray<TObjectPtr<UDayTimerCollectionAsset>> DaySequenceCollections;
 };

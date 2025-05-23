@@ -3,7 +3,11 @@
 
 #include "Actors/BaseDayActor.h"
 
+#include "DayTimer.h"
+#include "DayTimerCollectionAsset.h"
 #include "DynamicWeatherSubsystem.h"
+#include "InstancedStruct.h"
+#include "ProceduralDayTimer.h"
 #include "Components/DirectionalLightComponent.h"
 #include "Components/ExponentialHeightFogComponent.h"
 #include "Components/SkyAtmosphereComponent.h"
@@ -48,6 +52,21 @@ ABaseDayActor::ABaseDayActor(const FObjectInitializer& Init) : Super(Init)
 	SkySphereComponent->SetRelativeScale3D(FVector(400.f));
 }
 
+float ABaseDayActor::GetTimePerCycleToSeconds() const
+{
+	return TimePerCycle.ToSeconds();
+}
+
+float ABaseDayActor::GetDayLengthToSeconds() const
+{
+	return DayLength.ToSeconds();
+}
+
+float ABaseDayActor::GetInitialTimeOfDayToSeconds() const
+{
+	return InitialTimeOfDay.ToSeconds();
+}
+
 // Called when the game starts or when spawned
 void ABaseDayActor::BeginPlay()
 {
@@ -60,6 +79,8 @@ void ABaseDayActor::BeginPlay()
 			DynamicWeatherSubsystem->SetDaySequenceActor(this);
 		}
 	}
+
+	InitializeDayTimers();
 }
 
 void ABaseDayActor::OnConstruction(const FTransform& Transform)
@@ -73,6 +94,36 @@ void ABaseDayActor::OnConstruction(const FTransform& Transform)
 			if (DynamicWeatherSubsystem->GetDaySequenceActor(/* bFindFallbackOnNull */ false) != this)
 			{
 				DynamicWeatherSubsystem->SetDaySequenceActor(this);
+			}
+		}
+	}
+}
+
+void ABaseDayActor::InitializeDayTimers()
+{
+	
+	for (UDayTimerCollectionAsset* Collection : DaySequenceCollections)
+	{
+		if (!Collection)
+		{
+			continue;
+		}
+		
+		for (TInstancedStruct<FProceduralDayTimer>& ProceduralDaySequence : Collection->ProceduralDayTimers)
+		{
+			if (!ProceduralDaySequence.IsValid())
+			{
+				continue;
+			}
+
+			FProceduralDayTimer& ProceduralSequence = ProceduralDaySequence.GetMutable<FProceduralDayTimer>();
+ 
+			if (UDayTimer* Timer = ProceduralSequence.GetSequence(this))
+			{
+				Collection->Timer = Timer;
+				Timer->SetTimerDelegate(ProceduralDaySequence);
+				Timer->StartDayTimer();
+				//InitializeDaySequence(Timer);
 			}
 		}
 	}
