@@ -8,6 +8,7 @@
 #include "DynamicWeatherSubsystem.h"
 #include "InstancedStruct.h"
 #include "ProceduralDayTimer.h"
+#include "SeasonWeatherDataAsset.h"
 #include "Components/DirectionalLightComponent.h"
 #include "Components/ExponentialHeightFogComponent.h"
 #include "Components/SkyAtmosphereComponent.h"
@@ -52,6 +53,15 @@ ABaseDayActor::ABaseDayActor(const FObjectInitializer& Init) : Super(Init)
 	SkySphereComponent->SetRelativeScale3D(FVector(400.f));
 }
 
+UDayTimer* ABaseDayActor::GetCurrentDayTimer() const
+{
+	if(CurrentTimer)
+	{
+		return CurrentTimer;
+	}
+	return nullptr;
+}
+
 float ABaseDayActor::GetTimePerCycleToSeconds() const
 {
 	return TimePerCycle.ToSeconds();
@@ -67,6 +77,26 @@ float ABaseDayActor::GetInitialTimeOfDayToSeconds() const
 	return InitialTimeOfDay.ToSeconds();
 }
 
+float ABaseDayActor::GetInitialTimeOfDayToHour() const
+{
+	return InitialTimeOfDay.ToHours();
+}
+
+void ABaseDayActor::SetCurrentTimeFromSeconds(float Seconds)
+{
+	CurrentTime = FDynamicWeatherTime::FromSeconds(Seconds);
+}
+
+void ABaseDayActor::SetCurrentTimeFromHours(float Hours)
+{
+	CurrentTime = FDynamicWeatherTime::FromHours(Hours);
+}
+
+void ABaseDayActor::AdvanceDay()
+{
+	CurrentDayOfYear++;
+}
+
 // Called when the game starts or when spawned
 void ABaseDayActor::BeginPlay()
 {
@@ -80,7 +110,8 @@ void ABaseDayActor::BeginPlay()
 		}
 	}
 
-	InitializeDayTimers();
+	//InitializeDayTimers();
+	InitializeSeasonWeatherTimer();
 }
 
 void ABaseDayActor::OnConstruction(const FTransform& Transform)
@@ -121,10 +152,68 @@ void ABaseDayActor::InitializeDayTimers()
 			if (UDayTimer* Timer = ProceduralSequence.GetSequence(this))
 			{
 				Collection->Timer = Timer;
+				CurrentTimer = Timer;
 				Timer->SetTimerDelegate(ProceduralDaySequence);
 				Timer->StartDayTimer();
 				//InitializeDaySequence(Timer);
 			}
+		}
+	}
+}
+
+void ABaseDayActor::InitializeSeasonWeatherTimer()
+{
+	if(!SeasonWeatherDataAsset)
+	{
+		return;
+	}
+
+	if(SeasonWeatherDataAsset->SeasonWeatherInfos.IsEmpty())
+	{
+		return;
+	}
+
+	const TArray<FSeasonWeatherInfo>& SeasonWeatherInfos = SeasonWeatherDataAsset->SeasonWeatherInfos;
+
+	for(const FSeasonWeatherInfo& Info : SeasonWeatherInfos)
+	{
+		//// 현재 일수는 이 Info의 기간 안에 있음
+		if (CurrentDayOfYear >= Info.StartDay && CurrentDayOfYear < Info.StartDay + Info.Duration)
+		{
+			CurrentSeason = Info.SeasonName.ToString();
+			
+			FWeatherProbability SelectedWeather = Info.GetRandomWeather();
+
+			CurrentWeatherType = SelectedWeather.WeatherType;
+
+			TInstancedStruct<FProceduralDayTimer>& ProceduralDaySequence = SelectedWeather.ProceduralDayTimers;
+		
+			if (!ProceduralDaySequence.IsValid())
+			{
+				return;
+			}
+
+			FProceduralDayTimer& ProceduralSequence = ProceduralDaySequence.GetMutable<FProceduralDayTimer>();
+			
+			if(!ProceduralSequence.WeakTargetActor.Get())
+			{
+				ProceduralSequence.WeakTargetActor = this; // 바꾸기 권장..
+			}
+		
+			if(!CurrentTimer)
+			{
+				if (UDayTimer* Timer = ProceduralSequence.GetSequence(this))
+				{
+					CurrentTimer = Timer;
+					CurrentTimer->SetDayActor(this);
+					CurrentTimer->OnTimerCompleted.AddDynamic(this,&ThisClass::InitializeSeasonWeatherTimer);
+					CurrentTimer->OnTimerUpdatedFromHours.AddDynamic(this,&ThisClass::SetCurrentTimeFromHours);
+				}
+			}
+			CurrentTimer->SetTimerDelegate(ProceduralDaySequence);
+			CurrentTimer->StartDayTimer();
+			
+			return;
 		}
 	}
 }

@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "DynamicWeatherTime.h"
+#include "SeasonWeatherData.h"
 #include "GameFramework/Actor.h"
 #include "BaseDayActor.generated.h"
 
+class UDayTimer;
+class USeasonWeatherDataAsset;
 class UDayTimerCollectionAsset;
 class USkyAtmosphereComponent;
 class USkyLightComponent;
@@ -26,6 +29,9 @@ public:
 	ABaseDayActor(const FObjectInitializer& Init);
 
 public:
+
+	UDayTimer* GetCurrentDayTimer() const;
+	
 	/**
      * Get the duration of each day cycle in hours (assuming PlayRate is 1.0)
      *
@@ -50,13 +56,30 @@ public:
 	UFUNCTION(BlueprintCallable, Category="TimeOfDay")
 	float GetInitialTimeOfDayToSeconds() const;
 
+	/**
+	* Get the duration of each InitialTimeOfDay in hours (assuming PlayRate is 1.0)
+	*
+	* @return float, InitialTimeOfDay in Hours
+	*/
+	UFUNCTION(BlueprintCallable, Category="TimeOfDay")
+	float GetInitialTimeOfDayToHour() const;
+
+	void SetCurrentTimeFromSeconds(float Seconds);
+
+	UFUNCTION()
+	void SetCurrentTimeFromHours(float Hours);
+
+	void AdvanceDay();
 protected:
 
 	virtual void BeginPlay() override;
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 protected:
+	
 	virtual void InitializeDayTimers();
+	UFUNCTION()
+	virtual void InitializeSeasonWeatherTimer();
 
 protected:
 
@@ -107,8 +130,41 @@ protected:
 	UPROPERTY(EditAnywhere, Category = RuntimeDayCycle)
 	FDynamicWeatherTime InitialTimeOfDay;
 
+	/** 하루 주기가 시작되는 초기 시간 */
+	UPROPERTY(EditAnywhere, Category = SeasonWeather)
+	bool bHasSeason;
+	
+	/** 하루 주기가 시작되는 초기 시간 */
+	UPROPERTY(EditAnywhere, Category = SeasonWeather)
+	FDynamicWeatherTime CurrentTime;
+	
+	/** 1년 총 일수 */
+	UPROPERTY(EditAnywhere, Category = SeasonWeather)
+	int32 TotalDaysInYear;
+
+	/** 현재 일수 */
+	UPROPERTY(EditAnywhere, Category = SeasonWeather)
+	int32 CurrentDayOfYear =1;
+
+	/** 게임 내 진행 중인 "해당 해" */
+	UPROPERTY(EditAnywhere, Category = SeasonWeather)
+	int32 CurrentYear;
+
+	/** 현재 계절 */
+	UPROPERTY(EditAnywhere, Category = SeasonWeather)
+	FString CurrentSeason;
+
+	/** 현재 날씨 타입 */
+	UPROPERTY(EditAnywhere, Category = SeasonWeather)
+	EWeatherType CurrentWeatherType;
+	
+	UPROPERTY(EditAnywhere, Category = SeasonWeather)
+	TObjectPtr<UDayTimer> CurrentTimer;
 public:
 
-	UPROPERTY(EditAnywhere, Category="Sequence")
-	TArray<TObjectPtr<UDayTimerCollectionAsset>> DaySequenceCollections;
+	UPROPERTY(EditAnywhere, Category="Timer")
+	TArray<TObjectPtr<UDayTimerCollectionAsset>> DaySequenceCollections; // 계절이 없는 단순 하루
+
+	UPROPERTY(EditAnywhere, Category="Timer")
+	TObjectPtr<USeasonWeatherDataAsset> SeasonWeatherDataAsset; // 사계절이 존재하는 데이터
 };

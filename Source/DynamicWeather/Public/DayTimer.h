@@ -8,6 +8,9 @@
 #include "UObject/Object.h"
 #include "DayTimer.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTimerCompleted);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimerUpdatedFromHours, float, CurrentTimeInHours);
 /**
  * 
  */
@@ -22,20 +25,35 @@ public:
 	void SetInitTime(float InInitTime) {InitTime = InInitTime;}
 	
 	void SetTimerDelegate(const TInstancedStruct<FProceduralDayTimer>& ProceduralDaySequence);
-	float GetVirtualSecondsFromRealSeconds(int32 RealSeconds) const;
+	float GetVirtualSecondsFromRealSeconds(float RealSeconds) const;
 
 	void StartDayTimer();
 	UFUNCTION()
 	void OnDayTimer();
+
+	void SetDayActor(ABaseDayActor* InDayActor);
+
+public:
+	UPROPERTY(BlueprintAssignable,Category = Timer)
+	FOnTimerCompleted OnTimerCompleted;
+
+	UPROPERTY(BlueprintAssignable,Category = Timer)
+	FOnTimerUpdatedFromHours OnTimerUpdatedFromHours;
+	
 private:
 	
 	float TimerLength;
 	float TimerRate = 0.1;
+	float ElapsedTime = 0.0f;
 	float InitTime;
 	int32 VirtualDaySeconds;
+	bool bTimerSetupComplete = true;
 
 	FTimerHandle DayTimer;
 
 	TInstancedStruct<FProceduralDayTimer> TimerStruct;
 	FProceduralDayTimer ProceduralDayTimer;
+
+	UPROPERTY()
+	TObjectPtr<ABaseDayActor> DayActor;
 };

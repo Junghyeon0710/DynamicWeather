@@ -4,23 +4,23 @@
 
 #include "..\ProceduralDayTimer.h"
 //#include "NiagaraComponent.h"
-#include "SnowActivationTimer.generated.h"
+#include "CloudyActivationTimer.generated.h"
 
 class UNiagaraComponent;
 /**
  * 
  */
 USTRUCT()
-struct FSnowActivationTimer : public FProceduralDayTimer
+struct FCloudyActivationTimer : public FProceduralDayTimer
 {
 	GENERATED_BODY()
 
-	virtual ~FSnowActivationTimer() override
+	virtual ~FCloudyActivationTimer() override
 	{}
 protected:
 
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<UNiagaraComponent> Snow;
+	TObjectPtr<UNiagaraComponent> Cloudy;
 private:
 	virtual void BuildSequence(UProceduralDayTimerBuilder* InBuilder) override;
 	virtual void OnDayTimerEvent(float CurrentTimeOfDay) override;

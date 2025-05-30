@@ -29,12 +29,15 @@ UDayTimer* UProceduralDayTimerBuilder::Initialize(ABaseDayActor* InActor, UDayTi
 		ProceduralDayTimer = NewObject<UDayTimer>(InActor, TimerName, RF_Transient);
 		//ProceduralDayTimer->Initialize(RF_Transient);
 
-		const float DaySeconds = TargetActor->GetTimePerCycleToSeconds();
-		const float DayLength = TargetActor->GetDayLengthToSeconds();
-		ProceduralDayTimer->SetTimerLength(DaySeconds);
-		ProceduralDayTimer->SetVirtualDaySeconds(DayLength);
 	}
 
+	const float DaySeconds = TargetActor->GetTimePerCycleToSeconds();
+	const float DayLength = TargetActor->GetDayLengthToSeconds();
+	const float InitTime = TargetActor->GetInitialTimeOfDayToHour();
+	ProceduralDayTimer->SetTimerLength(DaySeconds);
+	ProceduralDayTimer->SetVirtualDaySeconds(DayLength);
+	ProceduralDayTimer->SetInitTime(InitTime);
+	
 	return ProceduralDayTimer;
 }
 

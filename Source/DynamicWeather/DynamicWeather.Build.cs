@@ -26,7 +26,8 @@ public class DynamicWeather : ModuleRules
 			new string[]
 			{
 				"Core", 
-				"StructUtils"
+				"StructUtils",
+				"Niagara"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -39,6 +40,7 @@ public class DynamicWeather : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+			
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

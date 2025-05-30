@@ -15,7 +15,7 @@ UDayTimer* FProceduralDayTimer::GetSequence(ABaseDayActor* InActor)
 	if (InActor)
 	{
 		UProceduralDayTimerBuilder* SequenceBuilder = NewObject<UProceduralDayTimerBuilder>();
-		ProceduralSequence = SequenceBuilder->Initialize(InActor);
+		ProceduralSequence = SequenceBuilder->Initialize(InActor,InActor->GetCurrentDayTimer());
 	}
 	
 	return ProceduralSequence;

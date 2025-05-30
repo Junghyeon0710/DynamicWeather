@@ -38,7 +38,7 @@ struct FProceduralDayTimer
 	{}
 	
 	UDayTimer* GetSequence(ABaseDayActor* InActor);
-	virtual void OnDayTimerEvent(float CurrentTimeOfDay) {}
+	virtual void OnDayTimerEvent(float CurrentTimeOfDay) {};
 	
 	// UPROPERTY(EditAnywhere, Category="Day Sequence")
 	// FDaySequenceConditionSet Conditions;
@@ -48,6 +48,7 @@ protected:
 	/** 타이머 값들 설정하는 곳*/
 	virtual void BuildSequence(UProceduralDayTimerBuilder* InBuilder) {}
 	
-	
+
+public:
 	TWeakObjectPtr<ABaseDayActor> WeakTargetActor = nullptr;
 };
