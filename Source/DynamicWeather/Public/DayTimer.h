@@ -23,8 +23,9 @@ public:
 	void SetTimerLength(float InTimerLength) {TimerLength = InTimerLength;}
 	void SetVirtualDaySeconds(float InVirtualDaySeconds) {VirtualDaySeconds = InVirtualDaySeconds;}
 	void SetInitTime(float InInitTime) {InitTime = InInitTime;}
-	
+
 	void SetTimerDelegate(const TInstancedStruct<FProceduralDayTimer>& ProceduralDaySequence);
+	void SetTimerDelegates(const TArray<TInstancedStruct<FProceduralDayTimer>>& ProceduralDaySequences);
 	float GetVirtualSecondsFromRealSeconds(float RealSeconds) const;
 
 	void StartDayTimer();
@@ -51,7 +52,7 @@ private:
 
 	FTimerHandle DayTimer;
 
-	TInstancedStruct<FProceduralDayTimer> TimerStruct;
+	TArray<TInstancedStruct<FProceduralDayTimer>> TimerStructs;
 	FProceduralDayTimer ProceduralDayTimer;
 
 	UPROPERTY()

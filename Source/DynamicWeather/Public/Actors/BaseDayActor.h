@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "DynamicWeatherTime.h"
+#include "InstancedStruct.h"
+#include "ProceduralDayTimer.h"
 #include "SeasonWeatherData.h"
 #include "GameFramework/Actor.h"
 #include "BaseDayActor.generated.h"
@@ -75,12 +77,15 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void OnConstruction(const FTransform& Transform) override;
 
-protected:
+public:
 	
 	virtual void InitializeDayTimers();
 	UFUNCTION()
 	virtual void InitializeSeasonWeatherTimer();
 
+	UFUNCTION()
+	virtual void StartCurrentTimer();
+	virtual void InitializeCurrentSeasonWeather();
 protected:
 
 	/** Standard Components **/
@@ -160,6 +165,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	TObjectPtr<UDayTimer> CurrentTimer;
+
+	UPROPERTY(EditAnywhere, Category = SeasonWeather)
+	TArray<TInstancedStruct<FProceduralDayTimer>> ProceduralDayTimers;
 public:
 
 	UPROPERTY(EditAnywhere, Category="Timer")

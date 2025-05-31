@@ -29,7 +29,7 @@ namespace UE::DaySequence
 /**
  * 
  */
-USTRUCT(meta=(Hidden))
+USTRUCT(meta=(Hidden),Blueprintable,BlueprintType)
 struct FProceduralDayTimer
 {
 	GENERATED_BODY()

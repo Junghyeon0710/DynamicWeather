@@ -8,7 +8,13 @@
 
 void UDayTimer::SetTimerDelegate(const TInstancedStruct<FProceduralDayTimer>& ProceduralDaySequence)
 {
-	TimerStruct = ProceduralDaySequence;
+	TimerStructs.Empty();
+	TimerStructs.Add(ProceduralDaySequence);
+}
+
+void UDayTimer::SetTimerDelegates(const TArray<TInstancedStruct<FProceduralDayTimer>>& ProceduralDaySequences)
+{
+	TimerStructs = ProceduralDaySequences;
 }
 
 float UDayTimer::GetVirtualSecondsFromRealSeconds(float RealSeconds) const
@@ -47,10 +53,18 @@ void UDayTimer::OnDayTimer()
 		if(bTimerSetupComplete)
 		{
 			DayActor->AdvanceDay();
+			DayActor->InitializeCurrentSeasonWeather();
 			bTimerSetupComplete =! bTimerSetupComplete;
 		}
 	}
-	TimerStruct.GetMutable<FProceduralDayTimer>().OnDayTimerEvent(VirtualTime);
+	for (TInstancedStruct<FProceduralDayTimer>& TimerStruct : TimerStructs)
+	{
+		if (TimerStruct.IsValid())
+		{
+			FProceduralDayTimer& Timer = TimerStruct.GetMutable<FProceduralDayTimer>();
+			Timer.OnDayTimerEvent(VirtualTime);
+		}
+	}
 
 	OnTimerUpdatedFromHours.Broadcast(VirtualTime);
 }

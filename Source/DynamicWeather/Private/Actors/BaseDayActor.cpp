@@ -172,7 +172,30 @@ void ABaseDayActor::InitializeSeasonWeatherTimer()
 	{
 		return;
 	}
+	const TArray<FSeasonWeatherInfo>& SeasonWeatherInfos = SeasonWeatherDataAsset->SeasonWeatherInfos;
 
+	for(const FSeasonWeatherInfo& Info : SeasonWeatherInfos)
+	{
+		TotalDaysInYear += Info.Duration;
+	}
+
+	InitializeCurrentSeasonWeather();
+	StartCurrentTimer();
+	
+}
+
+void ABaseDayActor::StartCurrentTimer()
+{
+	// CurrentTimer가 유효하면 TimerDelegates 등록 후 시작
+	if (CurrentTimer)
+	{
+		CurrentTimer->SetTimerDelegates(ProceduralDayTimers);
+		CurrentTimer->StartDayTimer();
+	}
+}
+
+void ABaseDayActor::InitializeCurrentSeasonWeather()
+{
 	const TArray<FSeasonWeatherInfo>& SeasonWeatherInfos = SeasonWeatherDataAsset->SeasonWeatherInfos;
 
 	for(const FSeasonWeatherInfo& Info : SeasonWeatherInfos)
@@ -182,38 +205,44 @@ void ABaseDayActor::InitializeSeasonWeatherTimer()
 		{
 			CurrentSeason = Info.SeasonName.ToString();
 			
-			FWeatherProbability SelectedWeather = Info.GetRandomWeather();
+			const FWeatherProbability SelectedWeather = Info.GetRandomWeather();
 
 			CurrentWeatherType = SelectedWeather.WeatherType;
 
-			TInstancedStruct<FProceduralDayTimer>& ProceduralDaySequence = SelectedWeather.ProceduralDayTimers;
-		
-			if (!ProceduralDaySequence.IsValid())
+			ProceduralDayTimers = SelectedWeather.ProceduralDayTimers;
+
+			if (ProceduralDayTimers.IsEmpty())
 			{
 				return;
 			}
 
-			FProceduralDayTimer& ProceduralSequence = ProceduralDaySequence.GetMutable<FProceduralDayTimer>();
-			
-			if(!ProceduralSequence.WeakTargetActor.Get())
+			// 첫 번째 유효한 타이머를 기준으로 CurrentTimer 세팅
+			for (TInstancedStruct<FProceduralDayTimer>& SequenceStruct : ProceduralDayTimers)
 			{
-				ProceduralSequence.WeakTargetActor = this; // 바꾸기 권장..
-			}
-		
-			if(!CurrentTimer)
-			{
-				if (UDayTimer* Timer = ProceduralSequence.GetSequence(this))
+				if (!SequenceStruct.IsValid())
 				{
-					CurrentTimer = Timer;
-					CurrentTimer->SetDayActor(this);
-					CurrentTimer->OnTimerCompleted.AddDynamic(this,&ThisClass::InitializeSeasonWeatherTimer);
-					CurrentTimer->OnTimerUpdatedFromHours.AddDynamic(this,&ThisClass::SetCurrentTimeFromHours);
+					continue;
+				}
+
+				FProceduralDayTimer& ProceduralSequence = SequenceStruct.GetMutable<FProceduralDayTimer>();
+
+				if (!ProceduralSequence.WeakTargetActor.IsValid())
+				{
+					ProceduralSequence.WeakTargetActor = this;
+				}
+
+				// CurrentTimer가 아직 없을 경우 생성
+				if (!CurrentTimer)
+				{
+					if (UDayTimer* Timer = ProceduralSequence.GetSequence(this))
+					{
+						CurrentTimer = Timer;
+						CurrentTimer->SetDayActor(this);
+						CurrentTimer->OnTimerCompleted.AddDynamic(this, &ThisClass::StartCurrentTimer);
+						CurrentTimer->OnTimerUpdatedFromHours.AddDynamic(this, &ThisClass::SetCurrentTimeFromHours);
+					}
 				}
 			}
-			CurrentTimer->SetTimerDelegate(ProceduralDaySequence);
-			CurrentTimer->StartDayTimer();
-			
-			return;
 		}
 	}
 }

@@ -18,7 +18,7 @@ struct FWeatherProbability
 	EWeatherType WeatherType;
 
 	UPROPERTY(EditAnywhere, Category="Day Timer", meta = (ExcludeBaseStruct))
-	TInstancedStruct<FProceduralDayTimer> ProceduralDayTimers;
+	TArray<TInstancedStruct<FProceduralDayTimer>> ProceduralDayTimers;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float Probability; // e.g. 50.0 for 50%
