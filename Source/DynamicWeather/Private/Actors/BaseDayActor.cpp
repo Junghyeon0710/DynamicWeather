@@ -245,6 +245,14 @@ void ABaseDayActor::InitializeCurrentSeasonWeather()
 			}
 		}
 	}
+
+	if (const UWorld* World = GetWorld())
+	{
+		if (const UDynamicWeatherSubsystem* DynamicWeatherSubsystem = World->GetSubsystem<UDynamicWeatherSubsystem>())
+		{
+			DynamicWeatherSubsystem->HandleDayChange(CurrentYear,CurrentDayOfYear,CurrentSeason,CurrentWeatherType);
+		}
+	}
 }
 
 

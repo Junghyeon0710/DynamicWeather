@@ -168,6 +168,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	TArray<TInstancedStruct<FProceduralDayTimer>> ProceduralDayTimers;
+
+
 public:
 
 	UPROPERTY(EditAnywhere, Category="Timer")

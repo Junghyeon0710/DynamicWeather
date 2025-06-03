@@ -3,12 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SeasonWeatherData.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "DynamicWeatherSubsystem.generated.h"
 class ABaseDayActor;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDayActorSet, ABaseDayActor*, NewActor);
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnDayActorSetEvent, ABaseDayActor*)
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnDayActorSetEvent, ABaseDayActor*);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnDayChanged, int32, Year, int32,Day,const FString&, Season,  EWeatherType, Weather);
 
 
 /**
@@ -30,6 +32,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category=DaySequence)
 	void SetDaySequenceActor(ABaseDayActor* InActor);
 
+	UFUNCTION()
+	void HandleDayChange(int32 InYear, int32 InDay,const FString& InSeason,  EWeatherType InWeather) const;
 public:
 
 	/** Blueprint exposed delegate that is broadcast when the active DayActor changes. */
@@ -38,6 +42,9 @@ public:
 
 	/** Natively exposed delegate that is broadcast when the active DayActor changes. */
 	FOnDayActorSetEvent OnDayActorSetEvent;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnDayChanged OnDayChanged;
 private:
 	void BroadcastOnDayActorSet(ABaseDayActor* InActor) const;
 	

@@ -40,6 +40,11 @@ void UDynamicWeatherSubsystem::SetDaySequenceActor(ABaseDayActor* InActor)
 	BroadcastOnDayActorSet(InActor);
 }
 
+void UDynamicWeatherSubsystem::HandleDayChange(int32 InYear, int32 InDay,const FString& InSeason, EWeatherType InWeather) const
+{
+	OnDayChanged.Broadcast(InYear,InDay,InSeason,InWeather);
+}
+
 void UDynamicWeatherSubsystem::BroadcastOnDayActorSet(ABaseDayActor* InActor) const
 {
 	OnDayActorSet.Broadcast(InActor);
