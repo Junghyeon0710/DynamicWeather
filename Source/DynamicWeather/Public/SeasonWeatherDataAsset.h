@@ -21,7 +21,7 @@ struct FWeatherProbability
 	TArray<TInstancedStruct<FProceduralDayTimer>> ProceduralDayTimers;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float Probability; // e.g. 50.0 for 50%
+	float Probability; // e.g. 50.0 for 50%   a a 
 };
 
 USTRUCT(BlueprintType)
