@@ -8,7 +8,7 @@ void FSnowActivationTimer::BuildSequence(UProceduralDayTimerBuilder* InBuilder)
 	FProceduralDayTimer::BuildSequence(InBuilder);
 }
 
-void FSnowActivationTimer::OnDayTimerEvent(float CurrentTimeOfDay)
-{
-
-}
+// void FSnowActivationTimer::OnDayTimerEvent(float CurrentTimeOfDay)
+// {
+//
+// }

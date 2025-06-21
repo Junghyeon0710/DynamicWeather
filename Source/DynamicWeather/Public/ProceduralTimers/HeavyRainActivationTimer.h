@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "..\ProceduralDayTimer.h"
+#include "NiagaraActivationTimerBase.h"
 //#include "NiagaraComponent.h"
 #include "HeavyRainActivationTimer.generated.h"
 
@@ -11,7 +11,7 @@ class UNiagaraComponent;
  * 
  */
 USTRUCT()
-struct FHeavyRainActivationTimer : public FProceduralDayTimer
+struct FHeavyRainActivationTimer : public FNiagaraActivationTimerBase
 {
 	GENERATED_BODY()
 
@@ -19,9 +19,7 @@ struct FHeavyRainActivationTimer : public FProceduralDayTimer
 	{}
 protected:
 
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<UNiagaraComponent> HeavyRain;
 private:
 	virtual void BuildSequence(UProceduralDayTimerBuilder* InBuilder) override;
-	virtual void OnDayTimerEvent(float CurrentTimeOfDay) override;
+	//virtual void OnDayTimerEvent(float CurrentTimeOfDay) override;
 };

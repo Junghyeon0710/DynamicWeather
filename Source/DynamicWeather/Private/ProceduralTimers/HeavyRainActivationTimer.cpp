@@ -8,7 +8,7 @@ void FHeavyRainActivationTimer::BuildSequence(UProceduralDayTimerBuilder* InBuil
 	FProceduralDayTimer::BuildSequence(InBuilder);
 }
 
-void FHeavyRainActivationTimer::OnDayTimerEvent(float CurrentTimeOfDay)
-{
-
-}
+// void FHeavyRainActivationTimer::OnDayTimerEvent(float CurrentTimeOfDay)
+// {
+//
+// }

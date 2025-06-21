@@ -15,6 +15,7 @@
 #include "Components/SkyLightComponent.h"
 #include "Components/VolumetricCloudComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "ProceduralTimers/NiagaraActivationTimerBase.h"
 
 
 // Sets default values
@@ -189,6 +190,14 @@ void ABaseDayActor::StartCurrentTimer()
 	// CurrentTimer가 유효하면 TimerDelegates 등록 후 시작
 	if (CurrentTimer)
 	{
+		for (auto& NiagaraTimer : ProceduralDayTimers)
+		{
+			if (const FNiagaraActivationTimerBase* NiagaraTimerBase = NiagaraTimer.GetPtr<FNiagaraActivationTimerBase>())
+			{
+				NiagaraTimerBase->DeActivateNiagara();
+			}
+			
+		}
 		CurrentTimer->SetTimerDelegates(ProceduralDayTimers);
 		CurrentTimer->StartDayTimer();
 	}

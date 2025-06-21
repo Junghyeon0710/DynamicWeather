@@ -8,6 +8,6 @@ void FCloudyActivationTimer::BuildSequence(UProceduralDayTimerBuilder* InBuilder
 	FProceduralDayTimer::BuildSequence(InBuilder);
 }
 
-void FCloudyActivationTimer::OnDayTimerEvent(float CurrentTimeOfDay)
-{
-}
+// void FCloudyActivationTimer::OnDayTimerEvent(float CurrentTimeOfDay)
+// {
+// }
