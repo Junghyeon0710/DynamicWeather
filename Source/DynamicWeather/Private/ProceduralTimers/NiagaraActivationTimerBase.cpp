@@ -19,7 +19,7 @@ void FNiagaraActivationTimerBase::DeActivateNiagara() const
 
 void FNiagaraActivationTimerBase::OnDayTimerEvent(float CurrentTimeOfDay)
 {
-	if (ensure(!NiagaraSystem))
+	if (!NiagaraSystem)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Niagara is not set!"));
 		return;
