@@ -45,6 +45,11 @@ void UDynamicWeatherSubsystem::HandleDayChange(int32 InYear, int32 InDay,const F
 	OnDayChanged.Broadcast(InYear,InDay,InSeason,InWeather);
 }
 
+bool UDynamicWeatherSubsystem::IsRaining() const
+{
+	return DayActor->IsRaining();
+}
+
 void UDynamicWeatherSubsystem::BroadcastOnDayActorSet(ABaseDayActor* InActor) const
 {
 	OnDayActorSet.Broadcast(InActor);

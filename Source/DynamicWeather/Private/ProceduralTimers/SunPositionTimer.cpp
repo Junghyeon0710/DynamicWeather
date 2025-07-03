@@ -19,7 +19,7 @@ void FSunPosition::OnDayTimerEvent(float CurrentTimeOfDay)
 
 	ABaseDayActor* TargetActor = WeakTargetActor.Get();
 
-	UE_LOG(LogTemp, Error, TEXT("CurrentTimeOfDay , %f"), CurrentTimeOfDay);
+//	UE_LOG(LogTemp, Error, TEXT("CurrentTimeOfDay , %f"), CurrentTimeOfDay);
 	if (!TargetActor)
 	{
 		return;;
@@ -31,12 +31,12 @@ void FSunPosition::OnDayTimerEvent(float CurrentTimeOfDay)
 		{
 			float SunPitch = FRotator::NormalizeAxis(SunPositionCurve->GetFloatValue(CurrentTimeOfDay));
 			//float SunPitch = SunPositionCurve->GetFloatValue(CurrentTimeOfDay);
-			UE_LOG(LogTemp, Error, TEXT("SunPitch , %f"), SunPitch);
+			//UE_LOG(LogTemp, Error, TEXT("SunPitch , %f"), SunPitch);
 			// Yaw는 유지하고 Pitch만 변경
 			const FRotator NewRotation = FRotator(SunPitch, 0.f, 0.f);
 			const FRotator LerpRotation = FMath::Lerp(SunComponent->GetRelativeRotation(),NewRotation,8.f);
 			SunComponent->SetRelativeRotation(NewRotation);
-			UE_LOG(LogTemp, Error, TEXT("%s"), *SunComponent->GetComponentRotation().ToString());
+			//UE_LOG(LogTemp, Error, TEXT("%s"), *SunComponent->GetComponentRotation().ToString());
 		}
 	}
 }

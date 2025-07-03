@@ -34,6 +34,9 @@ public:
 
 	UFUNCTION()
 	void HandleDayChange(int32 InYear, int32 InDay,const FString& InSeason,  EWeatherType InWeather) const;
+
+	UFUNCTION(BlueprintCallable, Category=DaySequence)
+	bool IsRaining() const;
 public:
 
 	/** Blueprint exposed delegate that is broadcast when the active DayActor changes. */

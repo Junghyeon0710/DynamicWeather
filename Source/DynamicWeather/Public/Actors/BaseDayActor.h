@@ -86,6 +86,11 @@ public:
 	UFUNCTION()
 	virtual void StartCurrentTimer();
 	virtual void InitializeCurrentSeasonWeather();
+
+public:
+	EWeatherType GetWeatherType() const {return CurrentWeatherType;};
+	bool IsRaining() const;
+	
 protected:
 
 	/** Standard Components **/

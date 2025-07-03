@@ -264,4 +264,13 @@ void ABaseDayActor::InitializeCurrentSeasonWeather()
 	}
 }
 
+bool ABaseDayActor::IsRaining() const
+{
+	if (CurrentWeatherType == EWeatherType::Rain || CurrentWeatherType == EWeatherType::HeavyRain)
+	{
+		return true;
+	}
+	return false;
+}
+
 
