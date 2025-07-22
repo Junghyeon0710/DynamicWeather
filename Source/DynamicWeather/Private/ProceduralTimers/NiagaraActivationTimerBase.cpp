@@ -21,18 +21,18 @@ void FNiagaraActivationTimerBase::OnDayTimerEvent(float CurrentTimeOfDay)
 {
 	if (!NiagaraSystem)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Niagara is not set!"));
+		//UE_LOG(LogTemp, Error, TEXT("Niagara is not set!"));
 		return;
 	}
 
 	ABaseDayActor* TargetActor = WeakTargetActor.Get();
-	
+
 	if (!TargetActor)
 	{
-		UE_LOG(LogTemp, Error, TEXT("TargetActor is not set!"));
+		//UE_LOG(LogTemp, Error, TEXT("TargetActor is not set!"));
 		return;
 	}
-	
+
 	if (!IsValid(NiagaraComponent))
 	{
 		// 1. NiagaraComponent 생성
