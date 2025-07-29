@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InstancedStruct.h"
 #include "ProceduralDayTimer.h"
 #include "Engine/DataAsset.h"
+#include "StructUtils/InstancedStruct.h"
 #include "DayTimerCollectionAsset.generated.h"
 
 class UDayTimer;

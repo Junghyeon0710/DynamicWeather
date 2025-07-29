@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "DynamicWeatherTime.h"
-#include "InstancedStruct.h"
 #include "ProceduralDayTimer.h"
 #include "SeasonWeatherData.h"
 #include "GameFramework/Actor.h"
+#include "StructUtils/InstancedStruct.h"
 #include "BaseDayActor.generated.h"
 
 class UDayTimer;
@@ -19,7 +19,8 @@ class UVolumetricCloudComponent;
 class UDirectionalLightComponent;
 class UExponentialHeightFogComponent;
 class UStaticMeshComponent;
-
+class UNiagaraComponent;
+class UNiagaraSystem;
 
 UCLASS(Blueprintable)
 class DYNAMICWEATHER_API ABaseDayActor : public AActor
@@ -174,6 +175,15 @@ protected:
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	TArray<TInstancedStruct<FProceduralDayTimer>> ProceduralDayTimers;
 
+	TArray<TInstancedStruct<FProceduralDayTimer>> PreProceduralDayTimers;
+
+	UPROPERTY()
+	TArray<TWeakObjectPtr<UNiagaraComponent>> NiagaraComponentPool;
+
+private:
+	void ActivateNiagaraForTimers(const TArray<TInstancedStruct<FProceduralDayTimer>>& Timers);
+	void DeactivateNiagaraForTimers(const TArray<TInstancedStruct<FProceduralDayTimer>>& Timers);
+	UNiagaraComponent* FindOrAddNiagaraComponent(UNiagaraSystem* NiagaraSystem);
 
 public:
 

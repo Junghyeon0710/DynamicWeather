@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InstancedStruct.h"
 #include "ProceduralDayTimer.h"
+#include "StructUtils/InstancedStruct.h"
 #include "UObject/Object.h"
 #include "DayTimer.generated.h"
 
