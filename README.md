@@ -4,6 +4,7 @@
 
 동적으로 날씨를 관리하는 플러그인입니다.
 
+- [데모 프로젝](https://github.com/Junghyeon0710/DynamicWeatherDemo)
 - [업데이트 노트](https://github.com/Junghyeon0710/DynamicWeather/wiki)
 
 <br>
