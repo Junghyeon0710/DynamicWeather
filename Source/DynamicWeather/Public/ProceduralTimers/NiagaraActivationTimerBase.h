@@ -19,11 +19,12 @@ struct FNiagaraActivationTimerBase : public FProceduralDayTimer
 	virtual ~FNiagaraActivationTimerBase() override
 	{}
 
-	void DeActivateNiagara() const;
+	//void DeActivateNiagara() const;
+	UNiagaraSystem* GetNiagaraSystem() const { return NiagaraSystem; };
 protected:
 
-	UPROPERTY()
-	TObjectPtr<UNiagaraComponent> NiagaraComponent;
+	// UPROPERTY()
+	// TObjectPtr<UNiagaraComponent> NiagaraComponent;
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UNiagaraSystem> NiagaraSystem;

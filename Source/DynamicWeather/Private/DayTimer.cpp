@@ -35,10 +35,16 @@ void UDayTimer::OnDayTimer()
 	
 	if(ElapsedTime>TimerLength)
 	{
+		if (InitTime == 0)
+		{
+			DayActor->AdvanceDay();
+			DayActor->InitializeCurrentSeasonWeather();
+		}
 		//종료 알림
 		ElapsedTime = 0;
 		OnTimerCompleted.Broadcast();
 		bTimerSetupComplete = true;
+	
 		return;
 	}
 
@@ -47,7 +53,9 @@ void UDayTimer::OnDayTimer()
 	const float VirtualHours = GetVirtualSecondsFromRealSeconds(ElapsedTime) / 3600.0f;
 	float VirtualTime = VirtualHours + InitTime;
 
-	if(VirtualTime >24)
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("VirtualHours : %f"), VirtualHours));
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("VirtualTime : %f"), VirtualTime));
+	if(VirtualTime > 24)
 	{
 		VirtualTime -=24;
 		if(bTimerSetupComplete)

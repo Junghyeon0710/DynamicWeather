@@ -16,6 +16,8 @@
 #include "Components/VolumetricCloudComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "ProceduralTimers/NiagaraActivationTimerBase.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 
 // Sets default values
@@ -187,20 +189,86 @@ void ABaseDayActor::InitializeSeasonWeatherTimer()
 
 void ABaseDayActor::StartCurrentTimer()
 {
-	// CurrentTimer가 유효하면 TimerDelegates 등록 후 시작
-	if (CurrentTimer)
+	if (!CurrentTimer) return;
+
+	// 1. PreTimer Niagara 비활성화
+	DeactivateNiagaraForTimers(PreProceduralDayTimers);
+
+	// 2. ProceduralTimer Niagara 활성화 + 풀에 없는 건 추가
+	ActivateNiagaraForTimers(ProceduralDayTimers);
+
+	// 3. 타이머 시작
+	CurrentTimer->SetTimerDelegates(ProceduralDayTimers);
+	CurrentTimer->StartDayTimer();
+}
+
+void ABaseDayActor::ActivateNiagaraForTimers(const TArray<TInstancedStruct<FProceduralDayTimer>>& Timers)
+{
+	for (const auto& TimerStruct : Timers)
 	{
-		for (auto& NiagaraTimer : ProceduralDayTimers)
+		if (const FNiagaraActivationTimerBase* NiagaraTimerBase = TimerStruct.GetPtr<FNiagaraActivationTimerBase>())
 		{
-			if (const FNiagaraActivationTimerBase* NiagaraTimerBase = NiagaraTimer.GetPtr<FNiagaraActivationTimerBase>())
+			UNiagaraSystem* TargetSystem = NiagaraTimerBase->GetNiagaraSystem();
+			if (!TargetSystem) continue;
+
+			UNiagaraComponent* FoundComponent = FindOrAddNiagaraComponent(TargetSystem);
+			if (FoundComponent)
 			{
-				NiagaraTimerBase->DeActivateNiagara();
+				FoundComponent->Activate(true);
 			}
-			
 		}
-		CurrentTimer->SetTimerDelegates(ProceduralDayTimers);
-		CurrentTimer->StartDayTimer();
 	}
+}
+
+void ABaseDayActor::DeactivateNiagaraForTimers(const TArray<TInstancedStruct<FProceduralDayTimer>>& Timers)
+{
+	for (const auto& TimerStruct : Timers)
+	{
+		if (const FNiagaraActivationTimerBase* NiagaraTimerBase = TimerStruct.GetPtr<FNiagaraActivationTimerBase>())
+		{
+			UNiagaraSystem* TargetSystem = NiagaraTimerBase->GetNiagaraSystem();
+			if (!TargetSystem) continue;
+
+			for (auto& NiagaraComp : NiagaraComponentPool)
+			{
+				if (NiagaraComp.Get() && NiagaraComp->GetAsset() == TargetSystem)
+				{
+					NiagaraComp->Deactivate();
+					break;
+				}
+			}
+		}
+	}
+}
+
+UNiagaraComponent* ABaseDayActor::FindOrAddNiagaraComponent(UNiagaraSystem* NiagaraSystem)
+{
+	// 1. 이미 존재하는 컴포넌트가 있는지 확인
+	for (auto& NiagaraComp : NiagaraComponentPool)
+	{
+		if (NiagaraComp.Get() && NiagaraComp->GetAsset() == NiagaraSystem)
+		{
+			return NiagaraComp.Get();
+		}
+	}
+
+	// 2. 없으면 새로 생성 후 풀에 추가
+	UNiagaraComponent* NewComp = UNiagaraFunctionLibrary::SpawnSystemAttached(
+		NiagaraSystem,
+		GetRootComponent(),
+		NAME_None,
+		FVector::ZeroVector,
+		FRotator::ZeroRotator,
+		EAttachLocation::KeepRelativeOffset,
+		false, // AutoDestroy
+		false  // AutoActivate
+	);
+
+	if (NewComp)
+	{
+		NiagaraComponentPool.Add(NewComp);
+	}
+	return NewComp;
 }
 
 void ABaseDayActor::InitializeCurrentSeasonWeather()
@@ -218,6 +286,7 @@ void ABaseDayActor::InitializeCurrentSeasonWeather()
 
 			CurrentWeatherType = SelectedWeather.WeatherType;
 
+			PreProceduralDayTimers = ProceduralDayTimers; //전에 정보 캐시 
 			ProceduralDayTimers = SelectedWeather.ProceduralDayTimers;
 
 			if (ProceduralDayTimers.IsEmpty())
