@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InstancedStruct.h"
 #include "ProceduralDayTimer.h"
 #include "Engine/DataAsset.h"
 #include "SeasonWeatherData.h"
+#include "StructUtils/InstancedStruct.h"
 #include "SeasonWeatherDataAsset.generated.h"
 
 USTRUCT(BlueprintType)

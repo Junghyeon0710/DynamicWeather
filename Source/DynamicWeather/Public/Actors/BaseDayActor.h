@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "DynamicWeatherTime.h"
-#include "InstancedStruct.h"
 #include "ProceduralDayTimer.h"
 #include "SeasonWeatherData.h"
 #include "GameFramework/Actor.h"
+#include "StructUtils/InstancedStruct.h"
 #include "BaseDayActor.generated.h"
 
 class UDayTimer;
