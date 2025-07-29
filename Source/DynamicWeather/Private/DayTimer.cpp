@@ -52,9 +52,7 @@ void UDayTimer::OnDayTimer()
 	//	const float VirtualTime = TimerRate + InitTime;
 	const float VirtualHours = GetVirtualSecondsFromRealSeconds(ElapsedTime) / 3600.0f;
 	float VirtualTime = VirtualHours + InitTime;
-
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("VirtualHours : %f"), VirtualHours));
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("VirtualTime : %f"), VirtualTime));
+	
 	if(VirtualTime > 24)
 	{
 		VirtualTime -=24;
