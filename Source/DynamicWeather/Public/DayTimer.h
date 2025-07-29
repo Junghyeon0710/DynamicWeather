@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ProceduralDayTimer.h"
-#include "StructUtils/InstancedStruct.h"
+#include "InstancedStruct.h"
 #include "UObject/Object.h"
 #include "DayTimer.generated.h"
 
@@ -12,7 +12,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTimerCompleted);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimerUpdatedFromHours, float, CurrentTimeInHours);
 /**
- * 
+ *
  */
 UCLASS()
 class DYNAMICWEATHER_API UDayTimer : public UObject
@@ -40,9 +40,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable,Category = Timer)
 	FOnTimerUpdatedFromHours OnTimerUpdatedFromHours;
-	
+
 private:
-	
+
 	float TimerLength;
 	float TimerRate = 0.1;
 	float ElapsedTime = 0.0f;

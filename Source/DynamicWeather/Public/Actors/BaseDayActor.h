@@ -7,7 +7,7 @@
 #include "ProceduralDayTimer.h"
 #include "SeasonWeatherData.h"
 #include "GameFramework/Actor.h"
-#include "StructUtils/InstancedStruct.h"
+#include "InstancedStruct.h"
 #include "BaseDayActor.generated.h"
 
 class UDayTimer;
@@ -34,7 +34,7 @@ public:
 public:
 
 	UDayTimer* GetCurrentDayTimer() const;
-	
+
 	/**
      * Get the duration of each day cycle in hours (assuming PlayRate is 1.0)
      *
@@ -79,7 +79,7 @@ protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 public:
-	
+
 	virtual void InitializeDayTimers();
 	UFUNCTION()
 	virtual void InitializeSeasonWeatherTimer();
@@ -91,28 +91,28 @@ public:
 public:
 	EWeatherType GetWeatherType() const {return CurrentWeatherType;};
 	bool IsRaining() const;
-	
+
 protected:
 
 	/** Standard Components **/
-	
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category= "Day", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USceneComponent> SunRootComponent;
-	
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category= "Day", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UDirectionalLightComponent> SunComponent;
-	
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Day", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USkyAtmosphereComponent> SkyAtmosphereComponent;
-	
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Day", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USkyLightComponent> SkyLightComponent;
-	
+
 	/** Optional Components **/
-	
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Day", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UExponentialHeightFogComponent> ExponentialHeightFogComponent;
-	
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Day", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UVolumetricCloudComponent> VolumetricCloudComponent;
 
@@ -144,11 +144,11 @@ protected:
 	/** 하루 주기가 시작되는 초기 시간 */
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	bool bHasSeason;
-	
+
 	/** 하루 주기가 시작되는 초기 시간 */
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	FDynamicWeatherTime CurrentTime;
-	
+
 	/** 1년 총 일수 */
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	int32 TotalDaysInYear;
@@ -168,7 +168,7 @@ protected:
 	/** 현재 날씨 타입 */
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	EWeatherType CurrentWeatherType;
-	
+
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	TObjectPtr<UDayTimer> CurrentTimer;
 

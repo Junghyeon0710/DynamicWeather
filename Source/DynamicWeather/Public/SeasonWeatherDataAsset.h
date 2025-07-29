@@ -6,7 +6,7 @@
 #include "ProceduralDayTimer.h"
 #include "Engine/DataAsset.h"
 #include "SeasonWeatherData.h"
-#include "StructUtils/InstancedStruct.h"
+#include "InstancedStruct.h"
 #include "SeasonWeatherDataAsset.generated.h"
 
 USTRUCT(BlueprintType)
@@ -21,7 +21,7 @@ struct FWeatherProbability
 	TArray<TInstancedStruct<FProceduralDayTimer>> ProceduralDayTimers;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float Probability; // e.g. 50.0 for 50%   a a 
+	float Probability; // e.g. 50.0 for 50%   a a
 };
 
 USTRUCT(BlueprintType)
@@ -40,12 +40,12 @@ struct FSeasonWeatherInfo
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<FWeatherProbability> WeatherChances;
-	
+
 	FWeatherProbability GetRandomWeather() const;
 };
 
 /**
- * 
+ *
  */
 UCLASS()
 class DYNAMICWEATHER_API USeasonWeatherDataAsset : public UDataAsset
@@ -53,10 +53,10 @@ class DYNAMICWEATHER_API USeasonWeatherDataAsset : public UDataAsset
 	GENERATED_BODY()
 
 public:
-	
+
 	// UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	// int32 TotalDaysInYear;
-	
+
 	UPROPERTY(EditAnywhere, Category = "SeasonWeatherInfo")
 	TArray<FSeasonWeatherInfo> SeasonWeatherInfos;
 };
