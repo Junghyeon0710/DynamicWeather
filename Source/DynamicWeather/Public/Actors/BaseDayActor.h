@@ -52,10 +52,10 @@ public:
 	float GetDayLengthToSeconds() const;
 
 	/**
- * Get the duration of each InitialTimeOfDay in hours (assuming PlayRate is 1.0)
- *
- * @return float, InitialTimeOfDay in Seconds
- */
+    * Get the duration of each InitialTimeOfDay in hours (assuming PlayRate is 1.0)
+    *
+    * @return float, InitialTimeOfDay in Seconds
+    */
 	UFUNCTION(BlueprintCallable, Category="TimeOfDay")
 	float GetInitialTimeOfDayToSeconds() const;
 
@@ -73,6 +73,11 @@ public:
 	void SetCurrentTimeFromHours(float Hours);
 
 	void AdvanceDay();
+
+    void NextDay();
+
+    UFUNCTION(BlueprintCallable, CallInEditor)
+    void JumpToNextDay();
 protected:
 
 	virtual void BeginPlay() override;

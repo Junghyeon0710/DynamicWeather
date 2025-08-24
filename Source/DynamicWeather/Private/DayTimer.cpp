@@ -25,26 +25,26 @@ float UDayTimer::GetVirtualSecondsFromRealSeconds(float RealSeconds) const
 void UDayTimer::StartDayTimer()
 {
 	GetWorld()->GetTimerManager().ClearTimer(DayTimer);
-	
-	GetWorld()->GetTimerManager().SetTimer(DayTimer,this,&UDayTimer::OnDayTimer,TimerRate,true);	
+    ElapsedTime = 0;
+
+	GetWorld()->GetTimerManager().SetTimer(DayTimer,this,&UDayTimer::OnDayTimer,TimerRate,true);
 }
 
 void UDayTimer::OnDayTimer()
 {
 	ElapsedTime += TimerRate;
-	
+
 	if(ElapsedTime>TimerLength)
 	{
 		if (InitTime == 0)
 		{
-			DayActor->AdvanceDay();
-			DayActor->InitializeCurrentSeasonWeather();
+			DayActor->NextDay();
 		}
 		//종료 알림
 		ElapsedTime = 0;
 		OnTimerCompleted.Broadcast();
 		bTimerSetupComplete = true;
-	
+
 		return;
 	}
 
@@ -52,7 +52,7 @@ void UDayTimer::OnDayTimer()
 	//	const float VirtualTime = TimerRate + InitTime;
 	const float VirtualHours = GetVirtualSecondsFromRealSeconds(ElapsedTime) / 3600.0f;
 	float VirtualTime = VirtualHours + InitTime;
-	
+
 	if(VirtualTime > 24)
 	{
 		VirtualTime -=24;
