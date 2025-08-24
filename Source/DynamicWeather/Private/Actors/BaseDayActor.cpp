@@ -108,8 +108,16 @@ void ABaseDayActor::NextDay()
 
 void ABaseDayActor::JumpToNextDay()
 {
-    NextDay();
+    if (!IsAfterMidnight())
+    {
+        NextDay();
+    }
     StartCurrentTimer();
+}
+
+bool ABaseDayActor::IsAfterMidnight() const
+{
+    return CurrentTime.Hours < InitialTimeOfDay.Hours;
 }
 
 void ABaseDayActor::BeginPlay()

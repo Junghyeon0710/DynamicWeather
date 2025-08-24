@@ -26,6 +26,7 @@ void UDayTimer::StartDayTimer()
 {
 	GetWorld()->GetTimerManager().ClearTimer(DayTimer);
     ElapsedTime = 0;
+    bTimerSetupComplete= true;
 
 	GetWorld()->GetTimerManager().SetTimer(DayTimer,this,&UDayTimer::OnDayTimer,TimerRate,true);
 }
@@ -58,8 +59,7 @@ void UDayTimer::OnDayTimer()
 		VirtualTime -=24;
 		if(bTimerSetupComplete)
 		{
-			DayActor->AdvanceDay();
-			DayActor->InitializeCurrentSeasonWeather();
+			DayActor->NextDay();
 			bTimerSetupComplete =! bTimerSetupComplete;
 		}
 	}

@@ -78,6 +78,8 @@ public:
 
     UFUNCTION(BlueprintCallable, CallInEditor)
     void JumpToNextDay();
+
+    bool IsAfterMidnight() const;
 protected:
 
 	virtual void BeginPlay() override;
@@ -146,16 +148,16 @@ protected:
 	UPROPERTY(EditAnywhere, Category = RuntimeDayCycle)
 	FDynamicWeatherTime InitialTimeOfDay;
 
-	/** 하루 주기가 시작되는 초기 시간 */
+	/** 계절을 갖고 있는지 */
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	bool bHasSeason;
 
-	/** 하루 주기가 시작되는 초기 시간 */
+	/** 현재 시간 */
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	FDynamicWeatherTime CurrentTime;
 
 	/** 1년 총 일수 */
-	UPROPERTY(EditAnywhere, Category = SeasonWeather)
+	UPROPERTY(VisibleAnywhere, Category = SeasonWeather)
 	int32 TotalDaysInYear;
 
 	/** 현재 일수 */
