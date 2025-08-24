@@ -25,13 +25,13 @@ ABaseDayActor::ABaseDayActor(const FObjectInitializer& Init) : Super(Init)
 {
 	USceneComponent* SceneRootComponent = CreateDefaultSubobject<USceneComponent>(USceneComponent::GetDefaultSceneRootVariableName());
 	SetRootComponent(SceneRootComponent);
-	
+
 	SunRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SunRoot"));
 	SunRootComponent->SetupAttachment(RootComponent);
-	
+
 	SunComponent = CreateDefaultSubobject<UDirectionalLightComponent>(TEXT("Sun"));
 	SunComponent->SetupAttachment(SunRootComponent);
-	
+
 	ExponentialHeightFogComponent = CreateOptionalDefaultSubobject<UExponentialHeightFogComponent>(TEXT("ExponentialHeightFog"));
 	ExponentialHeightFogComponent->SetupAttachment(RootComponent);
 	ExponentialHeightFogComponent->bEnableVolumetricFog = true;
@@ -100,7 +100,54 @@ void ABaseDayActor::AdvanceDay()
 	CurrentDayOfYear++;
 }
 
-// Called when the game starts or when spawned
+void ABaseDayActor::NormalizeTime()
+{
+    if (CurrentTime.Hours >= DayLength.Hours)
+    {
+        CurrentTime.Hours %= DayLength.Hours;
+    }
+}
+
+void ABaseDayActor::AdvanceTime(int32 InHours)
+{
+    CurrentTime.Hours += InHours;
+
+    if (CurrentTime.Hours >= DayLength.Hours)
+    {
+        NextDay();
+    }
+
+    CurrentTimer->AdvanceHours(InHours);
+}
+
+void ABaseDayActor::TestAdvanceTime()
+{
+    AdvanceTime(8);
+}
+
+void ABaseDayActor::NextDay()
+{
+    AdvanceDay();
+    InitializeCurrentSeasonWeather();
+
+    DeactivateNiagaraForTimers(PreProceduralDayTimers);
+    ActivateNiagaraForTimers(ProceduralDayTimers);
+}
+
+void ABaseDayActor::JumpToNextDay()
+{
+    if (!IsAfterMidnight())
+    {
+        NextDay();
+    }
+    StartCurrentTimer();
+}
+
+bool ABaseDayActor::IsAfterMidnight() const
+{
+    return CurrentTime.Hours < InitialTimeOfDay.Hours;
+}
+
 void ABaseDayActor::BeginPlay()
 {
 	Super::BeginPlay();
@@ -135,14 +182,14 @@ void ABaseDayActor::OnConstruction(const FTransform& Transform)
 
 void ABaseDayActor::InitializeDayTimers()
 {
-	
+
 	for (UDayTimerCollectionAsset* Collection : DaySequenceCollections)
 	{
 		if (!Collection)
 		{
 			continue;
 		}
-		
+
 		for (TInstancedStruct<FProceduralDayTimer>& ProceduralDaySequence : Collection->ProceduralDayTimers)
 		{
 			if (!ProceduralDaySequence.IsValid())
@@ -151,7 +198,7 @@ void ABaseDayActor::InitializeDayTimers()
 			}
 
 			FProceduralDayTimer& ProceduralSequence = ProceduralDaySequence.GetMutable<FProceduralDayTimer>();
- 
+
 			if (UDayTimer* Timer = ProceduralSequence.GetSequence(this))
 			{
 				Collection->Timer = Timer;
@@ -184,18 +231,16 @@ void ABaseDayActor::InitializeSeasonWeatherTimer()
 
 	InitializeCurrentSeasonWeather();
 	StartCurrentTimer();
-	
+    ActivateNiagaraForTimers(ProceduralDayTimers);
+
 }
 
 void ABaseDayActor::StartCurrentTimer()
 {
-	if (!CurrentTimer) return;
-
-	// 1. PreTimer Niagara 비활성화
-	DeactivateNiagaraForTimers(PreProceduralDayTimers);
-
-	// 2. ProceduralTimer Niagara 활성화 + 풀에 없는 건 추가
-	ActivateNiagaraForTimers(ProceduralDayTimers);
+	if (!CurrentTimer)
+	{
+	    return;
+	}
 
 	// 3. 타이머 시작
 	CurrentTimer->SetTimerDelegates(ProceduralDayTimers);
@@ -281,12 +326,12 @@ void ABaseDayActor::InitializeCurrentSeasonWeather()
 		if (CurrentDayOfYear >= Info.StartDay && CurrentDayOfYear < Info.StartDay + Info.Duration)
 		{
 			CurrentSeason = Info.SeasonName.ToString();
-			
+
 			const FWeatherProbability SelectedWeather = Info.GetRandomWeather();
 
 			CurrentWeatherType = SelectedWeather.WeatherType;
 
-			PreProceduralDayTimers = ProceduralDayTimers; //전에 정보 캐시 
+			PreProceduralDayTimers = ProceduralDayTimers; //전에 정보 캐시
 			ProceduralDayTimers = SelectedWeather.ProceduralDayTimers;
 
 			if (ProceduralDayTimers.IsEmpty())

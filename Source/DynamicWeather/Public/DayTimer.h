@@ -33,6 +33,7 @@ public:
 	void OnDayTimer();
 
 	void SetDayActor(ABaseDayActor* InDayActor);
+    void AdvanceHours(int32 InHours);
 
 public:
 	UPROPERTY(BlueprintAssignable,Category = Timer)
@@ -47,7 +48,7 @@ private:
 	float TimerRate = 0.1;
 	float ElapsedTime = 0.0f;
 	float InitTime;
-	int32 VirtualDaySeconds;
+	float VirtualDaySeconds;
 	bool bTimerSetupComplete = true;
 
 	FTimerHandle DayTimer;

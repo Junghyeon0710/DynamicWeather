@@ -54,6 +54,22 @@ bool UDynamicWeatherSubsystem::IsRaining() const
     return false;
 }
 
+void UDynamicWeatherSubsystem::HandleAdvanceTime(int32 InhHours)
+{
+    if (DayActor.IsValid())
+    {
+        DayActor->AdvanceTime(InhHours);
+    }
+}
+
+void UDynamicWeatherSubsystem::HandleNextDay()
+{
+    if (DayActor.IsValid())
+    {
+        DayActor->NextDay();
+    }
+}
+
 void UDynamicWeatherSubsystem::BroadcastOnDayActorSet(ABaseDayActor* InActor) const
 {
 	OnDayActorSet.Broadcast(InActor);
