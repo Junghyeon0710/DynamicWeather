@@ -14,7 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnDayChanged, int32, Year, int32,
 
 
 /**
- * 
+ *
  */
 UCLASS()
 class DYNAMICWEATHER_API UDynamicWeatherSubsystem : public UWorldSubsystem
@@ -22,7 +22,7 @@ class DYNAMICWEATHER_API UDynamicWeatherSubsystem : public UWorldSubsystem
 	GENERATED_BODY()
 
 public:
-	
+
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 
@@ -37,6 +37,14 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category=DaySequence)
 	bool IsRaining() const;
+
+public:
+    UFUNCTION(BlueprintCallable, Category = "Weather")
+    void HandleAdvanceTime(int32 InhHours);
+
+    UFUNCTION(BlueprintCallable, Category = "Weather")
+    void HandleNextDay();
+
 public:
 
 	/** Blueprint exposed delegate that is broadcast when the active DayActor changes. */
@@ -50,6 +58,6 @@ public:
 	FOnDayChanged OnDayChanged;
 private:
 	void BroadcastOnDayActorSet(ABaseDayActor* InActor) const;
-	
+
 	TWeakObjectPtr<ABaseDayActor> DayActor;
 };
