@@ -71,9 +71,13 @@ public:
 
 	UFUNCTION()
 	void SetCurrentTimeFromHours(float Hours);
+    void NormalizeTime();
 
 	void AdvanceDay();
-
+    UFUNCTION(BlueprintCallable)
+	void AdvanceTime(int32 InHours);
+    UFUNCTION(CallInEditor)
+    void TestAdvanceTime();
     void NextDay();
 
     UFUNCTION(BlueprintCallable, CallInEditor)

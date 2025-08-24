@@ -100,15 +100,37 @@ void ABaseDayActor::AdvanceDay()
 	CurrentDayOfYear++;
 }
 
+void ABaseDayActor::NormalizeTime()
+{
+    if (CurrentTime.Hours >= DayLength.Hours)
+    {
+        CurrentTime.Hours %= DayLength.Hours;
+    }
+}
+
+void ABaseDayActor::AdvanceTime(int32 InHours)
+{
+    CurrentTime.Hours += InHours;
+
+    if (CurrentTime.Hours >= DayLength.Hours)
+    {
+        NextDay();
+    }
+
+    CurrentTimer->AdvanceHours(InHours);
+}
+
+void ABaseDayActor::TestAdvanceTime()
+{
+    AdvanceTime(8);
+}
+
 void ABaseDayActor::NextDay()
 {
     AdvanceDay();
     InitializeCurrentSeasonWeather();
 
-    // 1. PreTimer Niagara 비활성화
     DeactivateNiagaraForTimers(PreProceduralDayTimers);
-
-    // 2. ProceduralTimer Niagara 활성화 + 풀에 없는 건 추가
     ActivateNiagaraForTimers(ProceduralDayTimers);
 }
 

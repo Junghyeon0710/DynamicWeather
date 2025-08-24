@@ -25,8 +25,8 @@ float UDayTimer::GetVirtualSecondsFromRealSeconds(float RealSeconds) const
 void UDayTimer::StartDayTimer()
 {
 	GetWorld()->GetTimerManager().ClearTimer(DayTimer);
-    ElapsedTime = 0;
     bTimerSetupComplete= true;
+	//ElapsedTime = FMath::Clamp(ElapsedTime - TimerLength, 0, TimerLength);
 
 	GetWorld()->GetTimerManager().SetTimer(DayTimer,this,&UDayTimer::OnDayTimer,TimerRate,true);
 }
@@ -42,7 +42,7 @@ void UDayTimer::OnDayTimer()
 			DayActor->NextDay();
 		}
 		//종료 알림
-		ElapsedTime = 0;
+	    ElapsedTime = FMath::Clamp(ElapsedTime - TimerLength, 0, TimerLength);
 		OnTimerCompleted.Broadcast();
 		bTimerSetupComplete = true;
 
@@ -50,7 +50,6 @@ void UDayTimer::OnDayTimer()
 	}
 
 	/** 초기시간부터 시작합니다 */
-	//	const float VirtualTime = TimerRate + InitTime;
 	const float VirtualHours = GetVirtualSecondsFromRealSeconds(ElapsedTime) / 3600.0f;
 	float VirtualTime = VirtualHours + InitTime;
 
@@ -78,4 +77,24 @@ void UDayTimer::OnDayTimer()
 void UDayTimer::SetDayActor(ABaseDayActor* InDayActor)
 {
 	DayActor = InDayActor;
+}
+
+void UDayTimer::AdvanceHours(int32 InHours)
+{
+    float VirtualSeconds = InHours * 3600.0f;
+
+    float RealDelta = (VirtualSeconds / VirtualDaySeconds) * TimerLength;
+
+    ElapsedTime += RealDelta;
+
+    const float VirtualHours = GetVirtualSecondsFromRealSeconds(ElapsedTime) / 3600.0f;
+    float VirtualTime = VirtualHours + InitTime;
+
+    if(VirtualTime > 24)
+    {
+        VirtualTime -=24;
+    }
+
+	OnTimerUpdatedFromHours.Broadcast(VirtualTime);
+
 }
