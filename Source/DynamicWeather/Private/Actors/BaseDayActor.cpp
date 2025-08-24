@@ -104,6 +104,12 @@ void ABaseDayActor::NextDay()
 {
     AdvanceDay();
     InitializeCurrentSeasonWeather();
+
+    // 1. PreTimer Niagara 비활성화
+    DeactivateNiagaraForTimers(PreProceduralDayTimers);
+
+    // 2. ProceduralTimer Niagara 활성화 + 풀에 없는 건 추가
+    ActivateNiagaraForTimers(ProceduralDayTimers);
 }
 
 void ABaseDayActor::JumpToNextDay()
@@ -203,6 +209,7 @@ void ABaseDayActor::InitializeSeasonWeatherTimer()
 
 	InitializeCurrentSeasonWeather();
 	StartCurrentTimer();
+    ActivateNiagaraForTimers(ProceduralDayTimers);
 
 }
 
@@ -212,12 +219,6 @@ void ABaseDayActor::StartCurrentTimer()
 	{
 	    return;
 	}
-
-	// 1. PreTimer Niagara 비활성화
-	DeactivateNiagaraForTimers(PreProceduralDayTimers);
-
-	// 2. ProceduralTimer Niagara 활성화 + 풀에 없는 건 추가
-	ActivateNiagaraForTimers(ProceduralDayTimers);
 
 	// 3. 타이머 시작
 	CurrentTimer->SetTimerDelegates(ProceduralDayTimers);
