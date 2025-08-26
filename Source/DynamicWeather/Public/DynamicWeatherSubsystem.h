@@ -39,6 +39,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category=DaySequence)
 	bool IsRaining() const;
 
+    UFUNCTION(BlueprintCallable, Category = "Weather")
+    EWeatherType GetWeatherType() const;
+
 public:
     UFUNCTION(BlueprintCallable, Category = "Weather")
     void HandleAdvanceTime(int32 InhHours);

@@ -66,6 +66,14 @@ bool UDynamicWeatherSubsystem::IsRaining() const
     return false;
 }
 
+EWeatherType UDynamicWeatherSubsystem::GetWeatherType() const
+{
+    if (DayActor.IsValid())
+    {
+        return DayActor->GetWeatherType();
+    }
+}
+
 void UDynamicWeatherSubsystem::HandleAdvanceTime(int32 InhHours)
 {
     if (DayActor.IsValid())
