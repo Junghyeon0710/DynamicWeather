@@ -22,6 +22,7 @@ class DYNAMICWEATHER_API UDynamicWeatherSubsystem : public UWorldSubsystem
 	GENERATED_BODY()
 
 public:
+    static UDynamicWeatherSubsystem* Get(const UObject* WorldContextObject);
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
