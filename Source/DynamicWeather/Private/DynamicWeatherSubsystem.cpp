@@ -72,6 +72,8 @@ EWeatherType UDynamicWeatherSubsystem::GetWeatherType() const
     {
         return DayActor->GetWeatherType();
     }
+
+    return EWeatherType::None;
 }
 
 void UDynamicWeatherSubsystem::HandleAdvanceTime(int32 InhHours)
