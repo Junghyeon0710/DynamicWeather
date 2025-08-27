@@ -6,6 +6,18 @@
 
 #include "EngineUtils.h"
 
+UDynamicWeatherSubsystem* UDynamicWeatherSubsystem::Get(const UObject* WorldContextObject)
+{
+    if (GEngine)
+    {
+        UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::Assert);
+
+        return World->GetSubsystem<UDynamicWeatherSubsystem>();
+    }
+
+    return nullptr;
+}
+
 void UDynamicWeatherSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
@@ -52,6 +64,16 @@ bool UDynamicWeatherSubsystem::IsRaining() const
 	    return DayActor->IsRaining();
     }
     return false;
+}
+
+EWeatherType UDynamicWeatherSubsystem::GetWeatherType() const
+{
+    if (DayActor.IsValid())
+    {
+        return DayActor->GetWeatherType();
+    }
+
+    return EWeatherType::None;
 }
 
 void UDynamicWeatherSubsystem::HandleAdvanceTime(int32 InhHours)
