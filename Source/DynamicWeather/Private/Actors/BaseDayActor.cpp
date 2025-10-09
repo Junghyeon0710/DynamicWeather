@@ -54,6 +54,8 @@ ABaseDayActor::ABaseDayActor(const FObjectInitializer& Init) : Super(Init)
 	SkySphereComponent->SetStaticMesh(SkySphereDefaultMesh.Object);
 	SkySphereComponent->SetMaterial(0, SkySphereDefaultMaterial.Object.Get());
 	SkySphereComponent->SetRelativeScale3D(FVector(400.f));
+    SkySphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    SkySphereComponent->SetCastShadow(false);
 }
 
 UDayTimer* ABaseDayActor::GetCurrentDayTimer() const
