@@ -102,6 +102,7 @@ public:
 public:
 	EWeatherType GetWeatherType() const {return CurrentWeatherType;};
 	bool IsRaining() const;
+    FDynamicWeatherTime GetCurrentTime() const {return CurrentTime;}
 
 protected:
 

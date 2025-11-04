@@ -42,6 +42,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Weather")
     EWeatherType GetWeatherType() const;
 
+    UFUNCTION(BlueprintCallable, Category = "Weather")
+    FString GetCurrentTime() const;
+
 public:
     UFUNCTION(BlueprintCallable, Category = "Weather")
     void HandleAdvanceTime(int32 InhHours);
