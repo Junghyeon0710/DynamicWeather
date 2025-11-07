@@ -102,6 +102,8 @@ public:
 	virtual void StartCurrentTimer();
 	virtual void InitializeCurrentSeasonWeather();
 
+    virtual void OnSeasonChanged();
+
 public:
 	EWeatherType GetWeatherType() const {return CurrentWeatherType;}
 	bool IsRaining() const;
