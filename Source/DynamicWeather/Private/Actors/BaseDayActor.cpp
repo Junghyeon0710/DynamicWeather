@@ -89,7 +89,7 @@ float ABaseDayActor::GetInitialTimeOfDayToHour() const
 
 float ABaseDayActor::GetWeatherChangeInterval() const
 {
-    return WeatherChangeInterval.Seconds;
+    return WeatherChangeInterval.ToSeconds();
 }
 
 void ABaseDayActor::SetCurrentTimeFromSeconds(float Seconds)
