@@ -23,6 +23,7 @@ public:
 	void SetTimerLength(float InTimerLength) {TimerLength = InTimerLength;}
 	void SetVirtualDaySeconds(float InVirtualDaySeconds) {VirtualDaySeconds = InVirtualDaySeconds;}
 	void SetInitTime(float InInitTime) {InitTime = InInitTime;}
+    void SetWeatherCycleTime(float InWeatherLength) {WeatherCycleTime = InWeatherLength;}
 
 	void SetTimerDelegate(const TInstancedStruct<FProceduralDayTimer>& ProceduralDaySequence);
 	void SetTimerDelegates(const TArray<TInstancedStruct<FProceduralDayTimer>>& ProceduralDaySequences);
@@ -49,6 +50,8 @@ private:
 	float ElapsedTime = 0.0f;
 	float InitTime;
 	float VirtualDaySeconds;
+    float WeatherCycleTime;
+    float ElapsedWeatherTime = 0.f;
 	bool bTimerSetupComplete = true;
 
 	FTimerHandle DayTimer;

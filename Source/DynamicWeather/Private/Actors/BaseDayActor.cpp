@@ -87,6 +87,11 @@ float ABaseDayActor::GetInitialTimeOfDayToHour() const
 	return InitialTimeOfDay.ToHours();
 }
 
+float ABaseDayActor::GetWeatherChangeInterval() const
+{
+    return WeatherChangeInterval.Seconds;
+}
+
 void ABaseDayActor::SetCurrentTimeFromSeconds(float Seconds)
 {
 	CurrentTime = FDynamicWeatherTime::FromSeconds(Seconds);

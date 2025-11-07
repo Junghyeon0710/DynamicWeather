@@ -67,6 +67,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="TimeOfDay")
 	float GetInitialTimeOfDayToHour() const;
 
+	UFUNCTION(BlueprintCallable, Category="TimeOfDay")
+    float GetWeatherChangeInterval() const;
+
 	void SetCurrentTimeFromSeconds(float Seconds);
 
 	UFUNCTION()

@@ -34,8 +34,14 @@ void UDayTimer::StartDayTimer()
 void UDayTimer::OnDayTimer()
 {
 	ElapsedTime += TimerRate;
+    ElapsedWeatherTime += TimerRate;
 
-	if(ElapsedTime>TimerLength)
+    if(ElapsedWeatherTime >= WeatherCycleTime)
+    {
+        DayActor->InitializeCurrentSeasonWeather();
+    }
+
+	if(ElapsedTime > TimerLength)
 	{
 		if (InitTime == 0)
 		{

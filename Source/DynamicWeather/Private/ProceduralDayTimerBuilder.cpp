@@ -12,7 +12,7 @@ UDayTimer* UProceduralDayTimerBuilder::Initialize(ABaseDayActor* InActor, UDayTi
 	{
 		return nullptr;
 	}
-	
+
 	TargetActor = InActor;
 
 	if (InitialTimer)
@@ -34,10 +34,12 @@ UDayTimer* UProceduralDayTimerBuilder::Initialize(ABaseDayActor* InActor, UDayTi
 	const float DaySeconds = TargetActor->GetTimePerCycleToSeconds();
 	const float DayLength = TargetActor->GetDayLengthToSeconds();
 	const float InitTime = TargetActor->GetInitialTimeOfDayToHour();
+    const float WeatherChangeInterval = TargetActor->GetWeatherChangeInterval();
 	ProceduralDayTimer->SetTimerLength(DaySeconds);
 	ProceduralDayTimer->SetVirtualDaySeconds(DayLength);
 	ProceduralDayTimer->SetInitTime(InitTime);
-	
+    ProceduralDayTimer->SetWeatherCycleTime(WeatherChangeInterval);
+
 	return ProceduralDayTimer;
 }
 
