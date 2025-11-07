@@ -181,6 +181,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	EWeatherType CurrentWeatherType;
 
+    /** 날씨 변경 시간 주기 */
+    UPROPERTY(EditAnywhere, Category = SeasonWeather)
+    FDynamicWeatherTime WeatherChangeInterval;
+
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	TObjectPtr<UDayTimer> CurrentTimer;
 
