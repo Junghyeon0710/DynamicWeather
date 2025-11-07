@@ -39,9 +39,6 @@ struct FSeasonWeatherInfo
 	int32 Duration; // 37 or 39
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    int32 SeasonChangeInterval = 8;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<FWeatherProbability> WeatherChances;
 
 	FWeatherProbability GetRandomWeather() const;
