@@ -254,7 +254,7 @@ void ABaseDayActor::StartCurrentTimer()
         if (CurrentDayOfYear >= Info.StartDay && CurrentDayOfYear < Info.StartDay + Info.Duration)
         {
             CurrentSeason = Info.SeasonName.ToString();
-            OnSeasonChanged();
+            HandleSeasonChanged();
         }
     }
 
@@ -397,7 +397,7 @@ void ABaseDayActor::InitializeCurrentSeasonWeather()
 	}
 }
 
-void ABaseDayActor::OnSeasonChanged()
+void ABaseDayActor::HandleSeasonChanged()
 {
 }
 

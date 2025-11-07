@@ -102,7 +102,7 @@ public:
 	virtual void StartCurrentTimer();
 	virtual void InitializeCurrentSeasonWeather();
 
-    virtual void OnSeasonChanged();
+    virtual void HandleSeasonChanged();
 
 public:
 	EWeatherType GetWeatherType() const {return CurrentWeatherType;}
