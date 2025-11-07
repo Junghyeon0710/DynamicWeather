@@ -38,9 +38,9 @@ void UDayTimer::OnDayTimer()
 	ElapsedTime += TimerRate;
     ElapsedWeatherTime += TimerRate;
 
-    float TestTime = GetVirtualSecondsFromRealSeconds(WeatherCycleTime);
+    const float VirtualElapsedWeatherTime = GetVirtualSecondsFromRealSeconds(ElapsedWeatherTime);
 
-    if(ElapsedWeatherTime >= GetVirtualSecondsFromRealSeconds(WeatherCycleTime))
+    if(VirtualElapsedWeatherTime >= WeatherCycleTime)
     {
         DayActor->InitializeCurrentSeasonWeather();
         ElapsedWeatherTime = 0.f;
