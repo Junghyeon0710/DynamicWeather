@@ -130,7 +130,7 @@ void ABaseDayActor::TestAdvanceTime()
 void ABaseDayActor::NextDay()
 {
     AdvanceDay();
-    InitializeCurrentSeasonWeather();
+   // InitializeCurrentSeasonWeather();
 
     DeactivateNiagaraForTimers(PreProceduralDayTimers);
     ActivateNiagaraForTimers(ProceduralDayTimers);
