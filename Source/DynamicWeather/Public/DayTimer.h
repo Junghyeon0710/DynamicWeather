@@ -51,7 +51,7 @@ private:
 	float InitTime;
 	float VirtualDaySeconds;
     float WeatherCycleTime;
-    float ElapsedWeatherTime = 0.f;
+    static float ElapsedWeatherTime;
 	bool bTimerSetupComplete = true;
 
 	FTimerHandle DayTimer;

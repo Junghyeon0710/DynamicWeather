@@ -6,6 +6,8 @@
 #include "InstancedStruct.h"
 #include "Actors/BaseDayActor.h"
 
+float UDayTimer::ElapsedWeatherTime = 0.f;
+
 void UDayTimer::SetTimerDelegate(const TInstancedStruct<FProceduralDayTimer>& ProceduralDaySequence)
 {
 	TimerStructs.Empty();
@@ -36,10 +38,12 @@ void UDayTimer::OnDayTimer()
 	ElapsedTime += TimerRate;
     ElapsedWeatherTime += TimerRate;
 
+    float TestTime = GetVirtualSecondsFromRealSeconds(WeatherCycleTime);
 
     if(ElapsedWeatherTime >= GetVirtualSecondsFromRealSeconds(WeatherCycleTime))
     {
         DayActor->InitializeCurrentSeasonWeather();
+        ElapsedWeatherTime = 0.f;
     }
 
 	if(ElapsedTime > TimerLength)
