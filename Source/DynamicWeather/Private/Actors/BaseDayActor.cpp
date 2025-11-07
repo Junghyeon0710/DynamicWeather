@@ -247,6 +247,16 @@ void ABaseDayActor::StartCurrentTimer()
 	    return;
 	}
 
+    const TArray<FSeasonWeatherInfo>& SeasonWeatherInfos = SeasonWeatherDataAsset->SeasonWeatherInfos;
+
+    for(const FSeasonWeatherInfo& Info : SeasonWeatherInfos)
+    {
+        if (CurrentDayOfYear >= Info.StartDay && CurrentDayOfYear < Info.StartDay + Info.Duration)
+        {
+            CurrentSeason = Info.SeasonName.ToString();
+        }
+    }
+
 	// 3. 타이머 시작
 	CurrentTimer->SetTimerDelegates(ProceduralDayTimers);
 	CurrentTimer->StartDayTimer();
@@ -330,7 +340,7 @@ void ABaseDayActor::InitializeCurrentSeasonWeather()
 		//// 현재 일수는 이 Info의 기간 안에 있음
 		if (CurrentDayOfYear >= Info.StartDay && CurrentDayOfYear < Info.StartDay + Info.Duration)
 		{
-			CurrentSeason = Info.SeasonName.ToString();
+			//CurrentSeason = Info.SeasonName.ToString();
 
 			const FWeatherProbability SelectedWeather = Info.GetRandomWeather();
 

@@ -40,6 +40,7 @@ void UDayTimer::OnDayTimer()
 
     const float VirtualElapsedWeatherTime = GetVirtualSecondsFromRealSeconds(ElapsedWeatherTime);
 
+    //날씨 변경
     if(VirtualElapsedWeatherTime >= WeatherCycleTime)
     {
         DayActor->InitializeCurrentSeasonWeather();
@@ -73,6 +74,7 @@ void UDayTimer::OnDayTimer()
 			bTimerSetupComplete =! bTimerSetupComplete;
 		}
 	}
+
 	for (TInstancedStruct<FProceduralDayTimer>& TimerStruct : TimerStructs)
 	{
 		if (TimerStruct.IsValid())
