@@ -137,8 +137,6 @@ void ABaseDayActor::NextDay()
     AdvanceDay();
    // InitializeCurrentSeasonWeather();
 
-    DeactivateNiagaraForTimers(PreProceduralDayTimers);
-    ActivateNiagaraForTimers(ProceduralDayTimers);
 }
 
 void ABaseDayActor::JumpToNextDay()
@@ -375,6 +373,9 @@ void ABaseDayActor::InitializeCurrentSeasonWeather()
 			}
 		}
 	}
+
+    DeactivateNiagaraForTimers(PreProceduralDayTimers);
+    ActivateNiagaraForTimers(ProceduralDayTimers);
 
 	if (const UWorld* World = GetWorld())
 	{

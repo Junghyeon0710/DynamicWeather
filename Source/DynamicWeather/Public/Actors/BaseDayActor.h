@@ -103,10 +103,10 @@ public:
 	virtual void InitializeCurrentSeasonWeather();
 
 public:
-	EWeatherType GetWeatherType() const {return CurrentWeatherType;};
+	EWeatherType GetWeatherType() const {return CurrentWeatherType;}
 	bool IsRaining() const;
     FDynamicWeatherTime GetCurrentTime() const {return CurrentTime;}
-
+    FString GetCurrenSeason() const {return CurrentSeason;}
 protected:
 
 	/** Standard Components **/
