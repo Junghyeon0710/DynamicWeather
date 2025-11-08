@@ -17,7 +17,7 @@ struct FWeatherProbability
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EWeatherType WeatherType;
 
-	UPROPERTY(EditAnywhere, Category="Day Timer", meta = (ExcludeBaseStruct))
+	UPROPERTY(EditAnywhere, Category="DayTimer", meta = (BaseStruct = "/Script/DynamicWeather.ProceduralDayTimer", ExcludeBaseStruct))
 	TArray<TInstancedStruct<FProceduralDayTimer>> ProceduralDayTimers;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

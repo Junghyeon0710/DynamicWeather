@@ -63,6 +63,7 @@ bool UDynamicWeatherSubsystem::IsRaining() const
     {
 	    return DayActor->IsRaining();
     }
+
     return false;
 }
 
@@ -74,6 +75,26 @@ EWeatherType UDynamicWeatherSubsystem::GetWeatherType() const
     }
 
     return EWeatherType::None;
+}
+
+FString UDynamicWeatherSubsystem::GetCurrentTime() const
+{
+    if (DayActor.IsValid())
+    {
+        return DayActor->GetCurrentTime().ToString();
+    }
+
+    return FString();
+}
+
+FString UDynamicWeatherSubsystem::GetCurrentSeason() const
+{
+    if (DayActor.IsValid())
+    {
+        return DayActor->GetCurrenSeason();
+    }
+
+    return FString();
 }
 
 void UDynamicWeatherSubsystem::HandleAdvanceTime(int32 InhHours)

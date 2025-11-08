@@ -22,32 +22,37 @@ namespace UE::DaySequence
 				return Component;
 			}
 		}
-		
+
 		return nullptr;
 	}
 }
 /**
- * 
+ *
  */
-USTRUCT(meta=(Hidden),Blueprintable,BlueprintType)
+USTRUCT(meta = (Hidden), Blueprintable, BlueprintType)
 struct FProceduralDayTimer
 {
 	GENERATED_BODY()
-	
-	virtual ~FProceduralDayTimer()
-	{}
-	
+
+    FProceduralDayTimer() {}
+    FProceduralDayTimer(const FProceduralDayTimer&) = default;
+    FProceduralDayTimer& operator=(const FProceduralDayTimer&) = default;
+    FProceduralDayTimer(FProceduralDayTimer&&) = default;
+    FProceduralDayTimer& operator=(FProceduralDayTimer&&) = default;
+    virtual ~FProceduralDayTimer()
+    {}
+
 	UDayTimer* GetSequence(ABaseDayActor* InActor);
 	virtual void OnDayTimerEvent(float CurrentTimeOfDay) {};
-	
+
 	// UPROPERTY(EditAnywhere, Category="Day Sequence")
 	// FDaySequenceConditionSet Conditions;
-	
+
 protected:
 
 	/** 타이머 값들 설정하는 곳*/
 	virtual void BuildSequence(UProceduralDayTimerBuilder* InBuilder) {}
-	
+
 
 public:
 	TWeakObjectPtr<ABaseDayActor> WeakTargetActor = nullptr;

@@ -67,6 +67,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="TimeOfDay")
 	float GetInitialTimeOfDayToHour() const;
 
+	UFUNCTION(BlueprintCallable, Category="TimeOfDay")
+    float GetWeatherChangeInterval() const;
+
 	void SetCurrentTimeFromSeconds(float Seconds);
 
 	UFUNCTION()
@@ -99,10 +102,13 @@ public:
 	virtual void StartCurrentTimer();
 	virtual void InitializeCurrentSeasonWeather();
 
-public:
-	EWeatherType GetWeatherType() const {return CurrentWeatherType;};
-	bool IsRaining() const;
+    virtual void HandleSeasonChanged();
 
+public:
+	EWeatherType GetWeatherType() const {return CurrentWeatherType;}
+	bool IsRaining() const;
+    FDynamicWeatherTime GetCurrentTime() const {return CurrentTime;}
+    FString GetCurrenSeason() const {return CurrentSeason;}
 protected:
 
 	/** Standard Components **/
@@ -179,6 +185,10 @@ protected:
 	/** 현재 날씨 타입 */
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	EWeatherType CurrentWeatherType;
+
+    /** 날씨 변경 시간 주기 */
+    UPROPERTY(EditAnywhere, Category = SeasonWeather)
+    FDynamicWeatherTime WeatherChangeInterval;
 
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	TObjectPtr<UDayTimer> CurrentTimer;

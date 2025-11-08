@@ -87,6 +87,11 @@ float ABaseDayActor::GetInitialTimeOfDayToHour() const
 	return InitialTimeOfDay.ToHours();
 }
 
+float ABaseDayActor::GetWeatherChangeInterval() const
+{
+    return WeatherChangeInterval.ToSeconds();
+}
+
 void ABaseDayActor::SetCurrentTimeFromSeconds(float Seconds)
 {
 	CurrentTime = FDynamicWeatherTime::FromSeconds(Seconds);
@@ -130,10 +135,8 @@ void ABaseDayActor::TestAdvanceTime()
 void ABaseDayActor::NextDay()
 {
     AdvanceDay();
-    InitializeCurrentSeasonWeather();
+   // InitializeCurrentSeasonWeather();
 
-    DeactivateNiagaraForTimers(PreProceduralDayTimers);
-    ActivateNiagaraForTimers(ProceduralDayTimers);
 }
 
 void ABaseDayActor::JumpToNextDay()
@@ -244,6 +247,17 @@ void ABaseDayActor::StartCurrentTimer()
 	    return;
 	}
 
+    const TArray<FSeasonWeatherInfo>& SeasonWeatherInfos = SeasonWeatherDataAsset->SeasonWeatherInfos;
+
+    for(const FSeasonWeatherInfo& Info : SeasonWeatherInfos)
+    {
+        if (CurrentDayOfYear >= Info.StartDay && CurrentDayOfYear < Info.StartDay + Info.Duration)
+        {
+            CurrentSeason = Info.SeasonName.ToString();
+            HandleSeasonChanged();
+        }
+    }
+
 	// 3. 타이머 시작
 	CurrentTimer->SetTimerDelegates(ProceduralDayTimers);
 	CurrentTimer->StartDayTimer();
@@ -327,7 +341,7 @@ void ABaseDayActor::InitializeCurrentSeasonWeather()
 		//// 현재 일수는 이 Info의 기간 안에 있음
 		if (CurrentDayOfYear >= Info.StartDay && CurrentDayOfYear < Info.StartDay + Info.Duration)
 		{
-			CurrentSeason = Info.SeasonName.ToString();
+			//CurrentSeason = Info.SeasonName.ToString();
 
 			const FWeatherProbability SelectedWeather = Info.GetRandomWeather();
 
@@ -371,6 +385,9 @@ void ABaseDayActor::InitializeCurrentSeasonWeather()
 		}
 	}
 
+    DeactivateNiagaraForTimers(PreProceduralDayTimers);
+    ActivateNiagaraForTimers(ProceduralDayTimers);
+
 	if (const UWorld* World = GetWorld())
 	{
 		if (const UDynamicWeatherSubsystem* DynamicWeatherSubsystem = World->GetSubsystem<UDynamicWeatherSubsystem>())
@@ -378,6 +395,10 @@ void ABaseDayActor::InitializeCurrentSeasonWeather()
 			DynamicWeatherSubsystem->HandleDayChange(CurrentYear,CurrentDayOfYear,CurrentSeason,CurrentWeatherType);
 		}
 	}
+}
+
+void ABaseDayActor::HandleSeasonChanged()
+{
 }
 
 bool ABaseDayActor::IsRaining() const
