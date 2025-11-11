@@ -10,3 +10,15 @@ enum class EWeatherType : uint8
 	Cloudy     UMETA(DisplayName = "흐림"),
 	Snow       UMETA(DisplayName = "눈")
 };
+
+UENUM(BlueprintType)
+enum class EWeekDay : uint8
+{
+    Monday = 0     UMETA(DisplayName = "월요일"),
+    Tuesday     UMETA(DisplayName = "화요일"),
+    Wednesday   UMETA(DisplayName = "수요일"),
+    Thursday    UMETA(DisplayName = "목요일"),
+    Friday      UMETA(DisplayName = "금요일"),
+    Saturday    UMETA(DisplayName = "토요일"),
+    Sunday      UMETA(DisplayName = "일요일")
+};

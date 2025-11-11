@@ -109,6 +109,7 @@ public:
 	bool IsRaining() const;
     FDynamicWeatherTime GetCurrentTime() const {return CurrentTime;}
     FString GetCurrenSeason() const {return CurrentSeason;}
+    FString GetCurrentWeekDay();
 protected:
 
 	/** Standard Components **/
@@ -185,6 +186,10 @@ protected:
 	/** 현재 날씨 타입 */
 	UPROPERTY(EditAnywhere, Category = SeasonWeather)
 	EWeatherType CurrentWeatherType;
+
+    /** 현재 요일 */
+	UPROPERTY(EditAnywhere, Category = SeasonWeather)
+    EWeekDay CurrentWeekDay = EWeekDay::Monday;
 
     /** 날씨 변경 시간 주기 */
     UPROPERTY(EditAnywhere, Category = SeasonWeather)
