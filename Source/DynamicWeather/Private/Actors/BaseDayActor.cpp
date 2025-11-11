@@ -415,7 +415,7 @@ bool ABaseDayActor::IsRaining() const
 
 FString ABaseDayActor::GetCurrentWeekDay()
 {
-    UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EDayOfWeek"), true);
+    UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EWeekDay"), true);
     if (!EnumPtr)
     {
         return TEXT("Invalid");
