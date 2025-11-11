@@ -97,6 +97,16 @@ FString UDynamicWeatherSubsystem::GetCurrentSeason() const
     return FString();
 }
 
+FString UDynamicWeatherSubsystem::GetCurrentDayOfWeek() const
+{
+    if (DayActor.IsValid())
+    {
+        return DayActor->GetCurrentWeekDay();
+    }
+
+    return FString();
+}
+
 void UDynamicWeatherSubsystem::HandleAdvanceTime(int32 InhHours)
 {
     if (DayActor.IsValid())

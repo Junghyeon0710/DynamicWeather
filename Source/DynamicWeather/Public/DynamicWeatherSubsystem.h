@@ -48,6 +48,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Weather")
     FString GetCurrentSeason() const;
 
+    UFUNCTION(BlueprintCallable, Category = "Weather")
+    FString GetCurrentDayOfWeek() const;
+
 public:
     UFUNCTION(BlueprintCallable, Category = "Weather")
     void HandleAdvanceTime(int32 InhHours);
