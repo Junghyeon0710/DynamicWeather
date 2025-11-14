@@ -135,6 +135,10 @@ void ABaseDayActor::TestAdvanceTime()
 void ABaseDayActor::NextDay()
 {
     AdvanceDay();
+
+    int32 DayIndex = static_cast<int32>(CurrentWeekDay);
+    DayIndex = (DayIndex + 1) % 7;
+    CurrentWeekDay = static_cast<EWeekDay>(DayIndex);
    // InitializeCurrentSeasonWeather();
 
 }
@@ -187,7 +191,6 @@ void ABaseDayActor::OnConstruction(const FTransform& Transform)
 
 void ABaseDayActor::InitializeDayTimers()
 {
-
 	for (UDayTimerCollectionAsset* Collection : DaySequenceCollections)
 	{
 		if (!Collection)
@@ -408,6 +411,17 @@ bool ABaseDayActor::IsRaining() const
 		return true;
 	}
 	return false;
+}
+
+FString ABaseDayActor::GetCurrentWeekDay()
+{
+    UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EWeekDay"), true);
+    if (!EnumPtr)
+    {
+        return TEXT("Invalid");
+    }
+
+    return EnumPtr->GetDisplayNameTextByIndex((int32)CurrentWeekDay).ToString();
 }
 
 
