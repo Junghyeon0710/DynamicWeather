@@ -5,8 +5,9 @@
 #include "..\ProceduralDayTimer.h"
 #include "SunPositionTimer.generated.h"
 
+class UCurveVector;
 /**
- * 
+ *
  */
 USTRUCT()
 struct FSunPosition : public FProceduralDayTimer
@@ -18,14 +19,15 @@ struct FSunPosition : public FProceduralDayTimer
 
 	UPROPERTY(EditAnywhere, Category = "Procedural Parameters")
 	FName SunComponentName = FName(TEXT("Sun"));
-	
+
 protected:
 
-	UPROPERTY(EditDefaultsOnly, Category = "SunPosition")
-	TObjectPtr<UCurveFloat> SunPositionCurve;
+    UPROPERTY(EditDefaultsOnly, Category = "SunPosition")
+    TObjectPtr<UCurveVector> SunPositionCurve;
+
 private:
 	virtual void BuildSequence(UProceduralDayTimerBuilder* InBuilder) override;
 	virtual void OnDayTimerEvent(float CurrentTimeOfDay) override;
 
-	
+
 };
